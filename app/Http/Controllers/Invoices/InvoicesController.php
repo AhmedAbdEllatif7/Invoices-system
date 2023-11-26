@@ -209,23 +209,36 @@ class InvoicesController extends Controller
     public function restoreInvoice(Request $request)
     {
         $id = $request->id;
-        $invoice = Invoice::withTrashed()->where('id',$id)->restore();
-        $invoice = Invoices_Details::withTrashed()->where('invoice_id',$id)->restore();
-        $invoice = Invoices_Attachments::withTrashed()->where('invoice_id',$id)->restore();
+
+        $this->restoreInvoiceById($id);
+        $this->restoreInvoiceDetailsById($id);
+        $this->restoreInvoiceAttachmentsById($id);
 
         session()->flash('restore');
         return redirect()->back();
     }
 
+    private function restoreInvoiceById($id)
+    {
+        return Invoice::withTrashed()->where('id', $id)->restore();
+    }
+
+    private function restoreInvoiceDetailsById($id)
+    {
+        return Invoices_Details::withTrashed()->where('invoice_id', $id)->restore();
+    }
+
+    private function restoreInvoiceAttachmentsById($id)
+    {
+        return Invoices_Attachments::withTrashed()->where('invoice_id', $id)->restore();
+    }
+
+
 
     public function showPrint(Request $request, $id)
     {
-        $invoice = Invoice::find($id);
-        if(!$invoice)
-        {
-            session()->flash('error');
-            return redirect()->back();
-        }
+        $invoice = Invoice::findOrFail($id);
+        
         return view('invoices.print_invoice',compact('invoice'));
     }
 

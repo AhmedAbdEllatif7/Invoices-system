@@ -14,6 +14,7 @@ class InvoiceObserver
     public function updated(Invoice $invoice)
     {
         $this->updateDetails($invoice);
+        $this->updateAttachment($invoice);
         $this->manageAttachmentsAndFolders($invoice);
     }
 
@@ -27,6 +28,13 @@ class InvoiceObserver
             'section_id' => $invoice->section_id,
             'note' => $invoice->note,
             'user' => Auth::user()->name,
+        ]);
+    }
+
+    private function updateAttachment($invoice)
+    {
+        $invoice->attachment()->update([
+            'invoice_number' => $invoice->invoice_number,
         ]);
     }
 
