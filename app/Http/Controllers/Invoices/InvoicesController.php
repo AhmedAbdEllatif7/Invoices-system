@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Invoices;
 
+use App\Events\InvoiceCreated;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\InvoiceRequest;
 use App\Models\Invoice;
 use App\Models\Invoices_Attachments;
 use App\Models\Invoices_Details;
@@ -11,121 +13,59 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Filesystem\Filesystem; // Import the Filesystem class
+use Illuminate\Support\Facades\File; // Import the File facade
 
 class InvoicesController extends Controller
 {
     public function __construct(){
-         $this->middleware('returnRedirectIfNotAuth');
+        $this->middleware('returnRedirectIfNotAuth');
     }
+
+
 
     public function index()
     {
         $invoices = Invoice::all();
-        return view('invoices.invoices',compact('invoices'));
+        return view('invoices.index',compact('invoices'));
     }
+
+
 
 
     public function create()
     {
         $sections = Section::get();
-        return view('invoices.add_invoice',compact('sections'));
+        return view('invoices.create',compact('sections'));
     }
 
-    public function store(Request $request)
+
+
+
+    public function store(InvoiceRequest $request)
     {
 
-        //Validation
-        $this->validate($request,
-        [
-            'invoice_number'    => 'required',
-            'invoice_date'      => 'required|date',
-            'due_date'          => 'required|date',
-            'product'           => 'required|max:225',
-            'section_id'        => 'required',
-            'amount_collection' => 'required',
-            'amount_commission' => 'required',
-            'Value_VAT'         => 'required',
-            'Rate_VAT'          => 'required',
-            'Total'             => 'required',
-        ],
-        [
-            'invoice_number.required' => 'عفوا يجب إدخال رقم الفاتورة' ,
-            'invoice_date.required' => 'عفوا يجب إدخال تاريخ الفاتورة',
-            'due_date.required' => 'عفوا يجب إدخال تاريخ الإستحقاق',
-            'product.required' => 'عفوا يجب إدخال إاسم المنتيج',
-            'section_id.required' => 'عفوا يجب إدخال رقم القسم',
-            'amount_collection.required' => 'عفوا يجب إدخال مبلغ التحصيل',
-            'amount_commission.required' => 'عفوا يجب إدخال مبلغ العمولة',
-            'Value_VAT.required' => 'عفوا يجب إدخال قيمة ضريبة القيمة المضافة',
-            'Rate_VAT.required' => 'عفوا يجب إدخال نسبة ضريبة القيمة المضافة',
-            'Total.required' => 'عفوا يجب إدخال رقم الإجمالي شامل الضريبة',
-        ]
-        );
-
         //Save Invoice In DataBase
-        Invoice::create([
-            'invoice_number'     => $request->invoice_number,
-            'invoice_date'       => $request->invoice_date,
-            'due_date'           => $request->due_date,
-            'product'            => $request->product,
-            'section_id'         => $request->section_id,
-            'amount_collection'  => $request->amount_collection,
-            'amount_commission'  => $request->amount_commission,
-            'discount'           => $request->discount,
-            'value_vat'          => $request->Value_VAT,
-            'rate_vat'           => $request->Rate_VAT,
-            'total'              => $request->Total,
-            'status'             => 'غير مدفوعة',
-            'value_status'       => 0,//غير مدفوعة
-            'note'               => $request->note,
-        ]);
+        $invoiceValidatedData = $request->validated();
 
-        //Save Invoice_Details In Datbase
-        $invoice_id = Invoice::latest()->first()->id;
-        Invoices_Details::create([
-            'invoice_id'         => $invoice_id,
-            'invoice_number'     => $request->invoice_number,
-            'product'            => $request->product,
-            'section_id'         => $request->section_id,
-            'status'             => 'غير مدفوعة',
-            'value_status'       => 0,//غير مدفوعة
-            'note'               => $request->note,
-            'user'               => Auth::user()->name,
-        ]);
+        $invoiceValidatedData['status'] = 'غير مدفوعة';
+        $invoiceValidatedData['value_status'] = 0; //غير مدفوعة
 
+        if($request->note){
+            $invoiceValidatedData['note'] = $request->note;
+        }
+        
+        $invoice = Invoice::create($invoiceValidatedData);
 
-        //Invoice_Attachments
-
-        //Get Data From Request
-        $invoice_id     = Invoice::latest()->first()->id;
-        $invoice_number = $request->invoice_number;
-        $file           = $request->file('pic');
-        $file_name      = $file->getClientOriginalName();
-
-        //Store Data In DataBase
-        Invoices_Attachments::create([
-            'file_name'      => $file_name,
-            'invoice_number' => $request->invoice_number,
-            'created_by'     => Auth::user()->name,
-            'invoice_id'     => $invoice_id,
-        ]);
-
-        //Move File
-        $file->move(public_path('Attachments/'.$invoice_number),$file_name);
-
-        // $url = 'http://127.0.0.1:8000/invoice/details/'.$invoice_id;
-        // Mail::to('uaahmed89@gmail.com')->send(new AddInvoice($url));
-        // //Send Notification
-
-        // $user = User::where('id', 17)->get();
-        // $invoice_id = Invoice::latest()->first()->id;
-
-        // Notification::send($user, new InvoiceCreated($invoice_id));
-
+        //Save Invoice_Details and Invoice_Attachments In Datbase 
+        $file = $request->file('file');       
+        event(new InvoiceCreated($invoice , $file));
+        
         session()->flash('Add');
         return redirect()->back();
-
     }
+
+
 
 
     public function show($id)
@@ -136,84 +76,129 @@ class InvoicesController extends Controller
             session()->flash('error');
             return redirect()->back();
         }
-        return view('invoices.showStatus',compact('invoice'));
+        return view('invoices.changeInvoiceStatus',compact('invoice'));
     }
 
 
-    public function edit(Request $request, $id)
+
+    public function edit($id)
     {
-        $invoice  = Invoice::find($id);
-        if(!$invoice)
-        {
-            session()->flash('error');
-            return redirect()->back();
+            $invoice  = Invoice::findOrFail($id);
+            $sections = Section::get();
+            return view('invoices.edit',compact('invoice','sections'));
+    }
+
+
+
+
+    public function update(InvoiceRequest $request)
+    {
+        $invoiceValidatedData = $request->validated();
+        $invoiceId = $request->id;
+        $invoice = Invoice::findOrFail($invoiceId);
+
+        if ($request->note) {
+            $invoiceValidatedData['note'] = $request->note;
         }
-        $sections = Section::get();
-        return view('invoices.edit_invoice',compact('invoice','sections'));
+        // Get the current invoice number before updating
+        $oldInvoiceNumber = $invoice->invoice_number;
+        
+        // Update invoice data
+        $invoice->update($invoiceValidatedData);
+        $newInvoiceNumber = $invoice->invoice_number;
+
+        // Rename attachments folder if the invoice number has changed
+        if ($oldInvoiceNumber !== $invoice->invoice_number) {
+            $this->renameAttachmentFolder($oldInvoiceNumber, $newInvoiceNumber);
+        }
+
+        // Handle attachments
+        if ($request->hasFile('file')) {
+            $this->handleAttachment($request->file('file'), $invoice);
+        }
+
+        session()->flash('edit_invoice');
+        return redirect()->back();
     }
 
-    public function update(Request $request)
+
+    private function renameAttachmentFolder($oldInvoiceNumber, $newInvoiceNumber)
     {
-        $id_invoice = $request->id;
-        $invoice_number = $request->invoice_number;
-        //Validation
-        $this->validate($request,
-        [
-            'invoice_number'    => 'required|numeric|unique:invoices,invoice_number,'.$id_invoice,
-            'invoice_date'      => 'required|date',
-            'due_date'          => 'required|date',
-            'product'           => 'required',
-            'amount_collection' => 'required|numeric',
-            'amount_commission' => 'required|numeric',
+        $oldFolder = public_path('Attachments/' . $oldInvoiceNumber);
+        $newFolder = public_path('Attachments/' . $newInvoiceNumber);
 
-        ],
-        [
-            'invoice_number.required'    => 'عفوا يجب إدخال رقم الفاتورة' ,
-            'invoice_date.required'      => 'عفوا يجب إدخال تاريخ الفاتورة',
-            'due_date.required'          => 'عفوا يجب إدخال تاريخ الإستحقاق',
-            'product.required'           => 'عفوا يجب إدخال إاسم المنتيج',
-            'amount_collection.required' => 'عفوا يجب إدخال مبلغ التحصيل',
-            'amount_commission.required' => 'عفوا يجب إدخال مبلغ العمولة',
-        ]
-        );
-
-        //Store In Database
-        $invoice = Invoice:: findorFail($id_invoice);
-        $invoice->update(
-            [
-                'invoice_number'    =>$request->invoice_number,
-                'invoice_date'      =>$request->invoice_date,
-                'due_date'          =>$request->due_date,
-                'product'           =>$request->product,
-                'section_id'        =>$request->section_id,
-                'amount_collection' =>$request->amount_collection,
-                'amount_commission' =>$request->amount_commission,
-                'value_vat'         =>$request->Value_VAT,
-                'rate_vat'          =>$request->Rate_VAT,
-                'total'             =>$request->Total,
-                'discount'          =>$request->discount,
-                'note'              =>$request->note,
-            ]
-            );
-            session()->flash('edit_invoice');
-            return redirect()->back();
+        if (file_exists($oldFolder)) {
+            rename($oldFolder, $newFolder);
+        }
     }
+
+
+    private function handleAttachment($attachmentFile, $invoice)
+    {
+        $filesystem = new FileSystem(); // Create an instance of the Filesystem class
+
+        $oldFolder = public_path('Attachments/' . $invoice->invoice_number);
+
+        // Check if the directory exists before attempting to delete
+        if ($filesystem->isDirectory($oldFolder)) {
+            $filesystem->deleteDirectory($oldFolder);
+        }
+
+        $fileName = $attachmentFile->getClientOriginalName();
+        $attachmentFile->move(public_path('Attachments/' . $invoice->invoice_number), $fileName);
+
+        // Update the file_name in the database
+        $invoice->attachment()->update([
+            'file_name' => $fileName,
+        ]);
+    }
+
+
+
 
 
 
     public function destroy(Request $request)
     {
         $id = $request->id;
-        $invoice     = Invoice::where('id',$id)->first();
-        $attachments = Invoices_Attachments::where('invoice_id',$id)->first();
-        if(!empty($attachments->invoice_number))
-        {
-            Storage::disk('public_uploads')->delete($attachments->invoice_number.'/'.$attachments->file_name);
-        }
-        // Storage::disk('s3')->delete('path/file.jpg');
-        $invoice->forceDelete();
+
+        // Delete attachments related to the invoice
+        $this->deleteAttachments($id);
+
+        // Delete the invoice
+        $this->deleteInvoice($id);
+
         return redirect()->back()->with(['delete' => 'تم حذف الفاتورة بنجاح']);
     }
+
+
+    private function deleteAttachments($id)
+    {
+        $attachments = Invoices_Attachments::where('invoice_id', $id)->get();
+
+        if ($attachments->isNotEmpty()) {
+            foreach ($attachments as $attachment) {
+                $path = 'Attachments/' . $attachment->invoice_number . '/' . $attachment->file_name;
+                Storage::disk('public_uploads')->delete($path);
+            }
+
+            $directory = public_path('Attachments/' . $attachments->first()->invoice_number);
+            if (File::exists($directory)) {
+                File::deleteDirectory($directory);
+            }
+        }
+    }
+
+
+    private function deleteInvoice($id)
+    {
+        $invoice = Invoice::findOrFail($id);
+        $invoice->forceDelete();
+    }
+
+
+
+
 
     public function getproducts($id)
     {
@@ -321,3 +306,38 @@ class InvoicesController extends Controller
     }
 
 }
+
+
+// $url = 'http://127.0.0.1:8000/invoice/details/'.$invoice_id;
+        // Mail::to('uaahmed89@gmail.com')->send(new AddInvoice($url));
+        // //Send Notification
+
+        // $user = User::where('id', 17)->get();
+        // $invoice_id = Invoice::latest()->first()->id;
+
+        // Notification::send($user, new InvoiceCreated($invoice_id));
+
+
+
+
+        // $invoice_number = $request->invoice_number;
+        // //Validation
+        // $this->validate($request,
+        // [
+        //     'invoice_number'    => 'required|numeric|unique:invoices,invoice_number,'.$id_invoice,
+        //     'invoice_date'      => 'required|date',
+        //     'due_date'          => 'required|date',
+        //     'product'           => 'required',
+        //     'amount_collection' => 'required|numeric',
+        //     'amount_commission' => 'required|numeric',
+
+        // ],
+        // [
+        //     'invoice_number.required'    => 'عفوا يجب إدخال رقم الفاتورة' ,
+        //     'invoice_date.required'      => 'عفوا يجب إدخال تاريخ الفاتورة',
+        //     'due_date.required'          => 'عفوا يجب إدخال تاريخ الإستحقاق',
+        //     'product.required'           => 'عفوا يجب إدخال إاسم المنتيج',
+        //     'amount_collection.required' => 'عفوا يجب إدخال مبلغ التحصيل',
+        //     'amount_commission.required' => 'عفوا يجب إدخال مبلغ العمولة',
+        // ]
+        // );

@@ -34,4 +34,14 @@ class Invoice extends Model
     {
         return $this->belongsTo('App\Models\Section','section_id','id');
     }
+
+    public function attachment()
+    {
+        return $this->hasMany('App\Models\Invoices_Attachments' , 'invoice_id' , 'id', 'id');
+    }
+
+    public function details()
+    {
+        return $this->hasMany(Invoices_Details::class, 'invoice_id');
+    }
 }

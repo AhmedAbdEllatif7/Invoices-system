@@ -32,7 +32,7 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Route::controller(InvoicesController::class)->group(function(){
     Route::get('invoice_edit/{id}',  'edit')->name('edit.invoice');   //Edit Invoiceinvoice_delete
-    Route::post('invoice_delete',  'destroy')->name('delete.invoice');  //Delete Invoice
+    // Route::post('invoice_delete',  'destroy')->name('delete.invoice');  //Delete Invoice
     Route::post('restore_invoice',  'restoreInvoice')->name('restore.invoice');  //Restore Invoice
     Route::post('invoice_edit_save/{id}' , 'update')->name('edit.save.invoice'); //Save Edit Invoice
     Route::get('show_invoice_status/{id}', 'show')->name('show.status.invoice'); //Show Change Status Page
@@ -92,6 +92,6 @@ Route::resource('products', ProductController::class);
 Route::post("invoices_attachment",[InvoicesAttachmentsController::class, 'store'])->name('store.attachment');
 
 
-Route::get('/{page}', [AdminController::class , 'index']);
+// Route::get('/{page}', [AdminController::class , 'index']);
 
 

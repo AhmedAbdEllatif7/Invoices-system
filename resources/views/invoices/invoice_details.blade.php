@@ -252,9 +252,17 @@
                                                                                 class="btn ripple btn-primary"
                                                                                 data-toggle="dropdown"
                                                                                 id="dropdownMenuButton"
-                                                                                type="button">العمليات<i
-                                                                                    class="fas fa-caret-down ml-1"></i></button>
+                                                                                type="button">العمليات
+                                                                                <i class="fas fa-caret-down ml-1">
+                                                                                </i>
+                                                                            </button>
+                                                                            
                                                                             <div class="dropdown-menu tx-13">
+                                                                                @php
+                                                                                $file = public_path('Attachments/' . $invoice_attachment->invoice_number . '/' . $invoice_attachment->file_name);
+                                                                                @endphp
+
+                                                                            @if (file_exists($file))
                                                                                 <a style="width: 150px"
                                                                                     class=" btn btn-outline-success btn-sm"
                                                                                     href="{{ url('view_file/' . $invoice_details->invoice_number . '/' . $invoice_attachment->file_name) }}"><i
@@ -265,7 +273,7 @@
                                                                                     href="{{ url('download_file/' . $invoice_details->invoice_number . '/' . $invoice_attachment->file_name) }}"><i
                                                                                     class="fas fa-download"></i>&nbsp;
                                                                                 تحميل</a>
-
+                                                                                @endif
                                                                                 <button style="width: 150px"
                                                                                 class="btn btn-outline-danger btn-sm "
                                                                                 data-attachment_id="{{ $invoice_attachment->id }}"
