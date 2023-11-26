@@ -78,7 +78,7 @@
         <div class="col-lg-12 col-md-12">
             <div class="card">
                 <div class="card-body">
-                    <form action="{{ route('update.status.invoice',$invoice->id) }}" method="post" enctype="multipart/form-data"
+                    <form action="{{ route('update.status.invoice' , 'test') }}" method="post" enctype="multipart/form-data"
                         autocomplete="off">
                         {{ csrf_field() }}
                         {{-- 1 --}}
@@ -192,20 +192,18 @@
                                 <label for="exampleTextarea">حالة الدفع</label>
                                 <select class="form-control" id="Status" name="Status" required>
                                     <option selected="true" disabled="disabled">-- حدد حالة الدفع --</option>
-                                    <option value="مدفوعة">مدفوعة</option>
-                                    <option value="مدفوعة جزئيا">مدفوعة جزئيا</option>
+                                    <option value="مدفوعة" {{ old('Status', $invoice->status) == 'مدفوعة' ? 'selected' : '' }}>مدفوعة</option>
+                                    <option value="مدفوعة جزئيا" {{ old('Status', $invoice->status) == 'مدفوعة جزئيا' ? 'selected' : '' }}>مدفوعة جزئيا</option>
                                 </select>
                             </div>
-
+                        
                             <div class="col">
                                 <label>تاريخ الدفع</label>
-                                <input class="form-control fc-datepicker" name="payment_date" placeholder="YYYY-MM-DD"
-                                    type="text" required>
+                                <input class="form-control fc-datepicker" name="payment_date" placeholder="YYYY-MM-DD" type="text" value="{{ old('payment_date' , $invoice->details->last()->payment_date ?? '') }}" required>
                             </div>
-
-
                         </div><br>
-
+                        
+ 
                         <div class="d-flex justify-content-center">
                             <button type="submit" class="btn btn-primary">حفظ البيانات</button>
                         </div>

@@ -24,17 +24,17 @@ class InvoiceRequest extends FormRequest
     public function rules()
     {
         return [
-            'invoice_number'    => 'required',
-            'invoice_date'      => 'required|date',
-            'due_date'          => 'required|date',
-            'product'           => 'required|max:225',
-            'section_id'        => 'required',
-            'amount_collection' => 'required',
-            'amount_commission' => 'required',
-            'value_vat'         => 'required',
-            'rate_vat'          => 'required',
-            'total'             => 'required',
-            'discount'          => 'required',
+            'invoice_number'    => 'required|max:50|unique:invoices,invoice_number',
+            'invoice_date'      => 'nullable|date',
+            'due_date'          => 'nullable|date|after_or_equal:invoice_date',
+            'product'           => 'required|max:50',
+            'section_id'        => 'required|exists:sections,id',
+            'amount_collection' => 'required|numeric',
+            'amount_commission' => 'required|numeric',
+            'discount'          => 'required|numeric',
+            'value_vat'         => 'required|numeric',
+            'rate_vat'          => 'required|max:999',
+            'total'             => 'required|numeric',
         ];
     }
 

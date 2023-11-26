@@ -128,11 +128,11 @@
                                                 <div class="dropdown-menu tx-13">
 
                                                     <a style="width: 150px; height:30px; font-size:13px" class=" btn btn-outline-info btn-sm"
-                                                        href="{{ url('invoice_edit/' . $invoice->id) }}"><i
+                                                        href="{{ route('invoices.edit' , $invoice->id) }}"><i
                                                             class="fas fa-edit"></i>&nbsp;&nbsp;&nbsp;تعديل</a>
 
                                                     <a style="width: 150px; height:30px; font-size:13px" class=" btn btn-outline-success btn-sm"
-                                                        href="{{ url('show_invoice_status/' . $invoice->id) }}"><i
+                                                        href="{{ route('invoices.show' , $invoice->id) }}"><i
                                                             class="fas fa-money-bill"></i>&nbsp;&nbsp;&nbsp;تغيير حالة
                                                         الدفع</a>
 

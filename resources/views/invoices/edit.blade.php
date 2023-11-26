@@ -80,9 +80,10 @@
         <div class="col-lg-12 col-md-12">
             <div class="card">
                 <div class="card-body">
-                    <form action="{{ url('invoice_edit_save/' . $invoice->id) }}" method="post" enctype="multipart/form-data"
+                    <form action="{{ route('invoices.update' , $invoice->id) }}" method="post" enctype="multipart/form-data"
                         autocomplete="off">
-                        {{ csrf_field() }}
+                        @csrf
+                        @method('PUT')
                         {{-- 1 --}}
 
                         <div class="row">
@@ -197,30 +198,6 @@
                                 <label for="exampleTextarea">ملاحظات</label>
                                 <textarea class="form-control" id="exampleTextarea" name="note" rows="3">{{ $invoice->note }}</textarea>
                             </div>
-                        </div><br>
-
-
-                        {{-- 6 --}}
-                        <p class="text-danger">* صيغة المرفق pdf, jpeg, .jpg, png </p>
-                        <h5 class="card-title">المرفقات</h5>
-
-                        @if($invoice->attachment->isNotEmpty())
-                            @foreach($invoice->attachment as $attachment)
-                                <div class="col-sm-12 col-md-12">
-                                    <img style="border-radius:20%"
-                                        src="{{ asset('Attachments/' . $invoice->invoice_number . '/' . $attachment->file_name) }}"
-                                        height="350px" width="350px" alt="">
-                                        <br>
-                                </div>
-                            @endforeach
-                        @else
-                            <p>No attachments found.</p>
-                        @endif
-                        <br>
-
-                        <div class="col-sm-12 col-md-12">
-                            <input type="file" name="file" class="dropify"
-                                accept=".pdf,.jpg, .png, image/jpeg, image/png" data-height="70" />
                         </div>
                         <br>
                         <div class="d-flex justify-content-center">

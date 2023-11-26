@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Filesystem\Filesystem; // Import the Filesystem class
 use Illuminate\Support\Facades\File; // Import the File facade
+use Throwable;
 
 class InvoicesController extends Controller
 {
@@ -44,27 +45,37 @@ class InvoicesController extends Controller
 
     public function store(InvoiceRequest $request)
     {
-
-        //Save Invoice In DataBase
-        $invoiceValidatedData = $request->validated();
-
-        $invoiceValidatedData['status'] = 'غير مدفوعة';
-        $invoiceValidatedData['value_status'] = 0; //غير مدفوعة
-
-        if($request->note){
-            $invoiceValidatedData['note'] = $request->note;
+        try {
+            DB::beginTransaction();
+    
+            // Save Invoice In DataBase
+            $invoiceValidatedData = $request->validated();
+    
+            $invoiceValidatedData['status'] = 'غير مدفوعة';
+            $invoiceValidatedData['value_status'] = 0; // غير مدفوعة
+    
+            if ($request->note) {
+                $invoiceValidatedData['note'] = $request->note;
+            }
+    
+            $invoice = Invoice::create($invoiceValidatedData);
+    
+            // Save Invoice_Details and Invoice_Attachments In Datbase
+            $file = $request->file('file');
+            event(new InvoiceCreated($invoice, $file));
+    
+            DB::commit();
+    
+            session()->flash('Add');
+            return redirect()->back();
+        } 
+        
+        catch (Throwable $e) {
+            DB::rollBack();
+            return redirect()->back()->withErrors(['error' => 'An error occurred: ' . $e->getMessage()]);
         }
         
-        $invoice = Invoice::create($invoiceValidatedData);
-
-        //Save Invoice_Details and Invoice_Attachments In Datbase 
-        $file = $request->file('file');       
-        event(new InvoiceCreated($invoice , $file));
-        
-        session()->flash('Add');
-        return redirect()->back();
     }
-
 
 
 
@@ -94,64 +105,20 @@ class InvoicesController extends Controller
     public function update(InvoiceRequest $request)
     {
         $invoiceValidatedData = $request->validated();
-        $invoiceId = $request->id;
-        $invoice = Invoice::findOrFail($invoiceId);
+        
+        $invoice = Invoice::findOrFail($request->id);
 
-        if ($request->note) {
+        if ($request->has('note')) {
             $invoiceValidatedData['note'] = $request->note;
         }
-        // Get the current invoice number before updating
-        $oldInvoiceNumber = $invoice->invoice_number;
         
-        // Update invoice data
         $invoice->update($invoiceValidatedData);
-        $newInvoiceNumber = $invoice->invoice_number;
-
-        // Rename attachments folder if the invoice number has changed
-        if ($oldInvoiceNumber !== $invoice->invoice_number) {
-            $this->renameAttachmentFolder($oldInvoiceNumber, $newInvoiceNumber);
-        }
-
-        // Handle attachments
-        if ($request->hasFile('file')) {
-            $this->handleAttachment($request->file('file'), $invoice);
-        }
 
         session()->flash('edit_invoice');
         return redirect()->back();
     }
 
 
-    private function renameAttachmentFolder($oldInvoiceNumber, $newInvoiceNumber)
-    {
-        $oldFolder = public_path('Attachments/' . $oldInvoiceNumber);
-        $newFolder = public_path('Attachments/' . $newInvoiceNumber);
-
-        if (file_exists($oldFolder)) {
-            rename($oldFolder, $newFolder);
-        }
-    }
-
-
-    private function handleAttachment($attachmentFile, $invoice)
-    {
-        $filesystem = new FileSystem(); // Create an instance of the Filesystem class
-
-        $oldFolder = public_path('Attachments/' . $invoice->invoice_number);
-
-        // Check if the directory exists before attempting to delete
-        if ($filesystem->isDirectory($oldFolder)) {
-            $filesystem->deleteDirectory($oldFolder);
-        }
-
-        $fileName = $attachmentFile->getClientOriginalName();
-        $attachmentFile->move(public_path('Attachments/' . $invoice->invoice_number), $fileName);
-
-        // Update the file_name in the database
-        $invoice->attachment()->update([
-            'file_name' => $fileName,
-        ]);
-    }
 
 
 
@@ -162,44 +129,17 @@ class InvoicesController extends Controller
     {
         $id = $request->id;
 
-        // Delete attachments related to the invoice
-        $this->deleteAttachments($id);
-
-        // Delete the invoice
-        $this->deleteInvoice($id);
+        $invoice = Invoice::findOrFail($id);
+        $invoice->delete();
 
         return redirect()->back()->with(['delete' => 'تم حذف الفاتورة بنجاح']);
     }
 
 
-    private function deleteAttachments($id)
-    {
-        $attachments = Invoices_Attachments::where('invoice_id', $id)->get();
-
-        if ($attachments->isNotEmpty()) {
-            foreach ($attachments as $attachment) {
-                $path = 'Attachments/' . $attachment->invoice_number . '/' . $attachment->file_name;
-                Storage::disk('public_uploads')->delete($path);
-            }
-
-            $directory = public_path('Attachments/' . $attachments->first()->invoice_number);
-            if (File::exists($directory)) {
-                File::deleteDirectory($directory);
-            }
-        }
-    }
-
-
-    private function deleteInvoice($id)
-    {
-        $invoice = Invoice::findOrFail($id);
-        $invoice->forceDelete();
-    }
 
 
 
-
-
+    //Belongs to ajax
     public function getproducts($id)
     {
         $products = DB::table("products")->where("section_id", $id)->pluck("product_name", "id");
@@ -208,57 +148,41 @@ class InvoicesController extends Controller
 
 
 
-    public function updateStatus(Request $request,$id)
+    public function updateStatus(Request $request)
     {
-        $invoice = Invoice::findorFail($id);
-        if($request->Status == 'مدفوعة')
-        {
-        $invoice->update(
-            [
-                'value_status' =>1,
-                'status'       =>$request->Status,
-                'payment_date' =>$request->payment_date,
-            ]
-            );
-            Invoices_Details::create([
-                'invoice_id'    => $request->id,
-                'invoice_number'=> $request->invoice_number,
-                'product'       => $request->product,
-                'section_id'    => $request->section_id,
-                'status'        => $request->Status,
-                'value_status'  => 1,
-                'payment_date'  => $request->payment_date,
-                'note'          => $request->note,
-                'user'          => Auth::user()->name,
-            ]);
-        }
-
-
-        else
-        {
-        $invoice->update(
-            [
-                'value_status' =>2,
-                'status'       =>$request->Status,
-                'payment_date' =>$request->payment_date,
-            ]
-            );
-            Invoices_Details::create([
-                'invoice_id'    => $request->id,
-                'invoice_number'=> $request->invoice_number,
-                'product'       => $request->product,
-                'section_id'    => $request->section_id,
-                'status'        => $request->Status,
-                'value_status'  => 2,
-                'payment_date'  => $request->payment_date,
-                'note'          => $request->note,
-                'user'          => Auth::user()->name,
-            ]);
-        }
-
-            session()->flash('edit');
-            return redirect('invoices');
+        $invoice = Invoice::findOrFail($request->id);
+        $data = [
+            'value_status' => $request->Status === 'مدفوعة' ? 1 : 2,
+            'status' => $request->Status,
+            'payment_date' => $request->payment_date, 
+        ];
+        
+        $invoice->update($data);
+        
+        $this->updateInvoiceDetails($request , $data['value_status']);
+        
+        session()->flash('edit');
+        return redirect('invoices');
     }
+
+
+    private function updateInvoiceDetails($request , $valueStatus)
+    {
+        Invoices_Details::create([
+            'invoice_id'    => $request->id,
+            'invoice_number'=> $request->invoice_number,
+            'product'       => $request->product,
+            'section_id'    => $request->section_id,
+            'status'        => $request->Status,
+            'value_status'  => $valueStatus,
+            'payment_date'  => $request->payment_date,
+            'note'          => $request->note,
+            'user'          => Auth::user()->name,
+        ]);
+
+    }
+
+
 
     public function showPayedInvoices()
     {

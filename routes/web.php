@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Auth\AdminController;
 use App\Http\Controllers\Invoices\InvoiceReportController;
 use App\Http\Controllers\Invoices\InvoicesArchiefController;
 use App\Http\Controllers\Invoices\InvoicesAttachmentsController;
@@ -31,11 +30,7 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::controller(InvoicesController::class)->group(function(){
-    Route::get('invoice_edit/{id}',  'edit')->name('edit.invoice');   //Edit Invoiceinvoice_delete
-    // Route::post('invoice_delete',  'destroy')->name('delete.invoice');  //Delete Invoice
     Route::post('restore_invoice',  'restoreInvoice')->name('restore.invoice');  //Restore Invoice
-    Route::post('invoice_edit_save/{id}' , 'update')->name('edit.save.invoice'); //Save Edit Invoice
-    Route::get('show_invoice_status/{id}', 'show')->name('show.status.invoice'); //Show Change Status Page
     Route::get('show_print/{id}', 'showPrint')->name('show.print.invoice'); //Print Invoice
     Route::post('invoice_update_status/{id}', 'updateStatus')->name('update.status.invoice'); //Update Invoice Status
     Route::get('sections/{id}', 'getproducts'); //Get Product
