@@ -2,17 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\AddInvoice;
 use App\Models\Invoice;
-use App\Models\Invoices_Attachments;
-use App\Models\Invoices_Details;
-use App\Models\Product;
-use App\Models\Section;
-use App\Notifications\InvoiceCreated;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
+
 
 class HomeController extends Controller
 {

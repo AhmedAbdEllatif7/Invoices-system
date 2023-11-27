@@ -1,9 +1,9 @@
 <?php
 
 namespace App\Http\Controllers\Invoices;
-
+use Illuminate\Routing\Controller;
 use App\Events\InvoiceCreated;
-use App\Http\Controllers\Controller;
+// use App\Http\Controllers\Controller;
 use App\Http\Requests\InvoiceRequest;
 use App\Models\Invoice;
 use App\Models\InvoiceAttachment;

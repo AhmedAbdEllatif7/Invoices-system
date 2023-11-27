@@ -1,10 +1,10 @@
 <?php
 
-use App\Http\Controllers\Invoices\InvoiceReportController;
-use App\Http\Controllers\Invoices\InvoicesArchiefController;
-use App\Http\Controllers\Invoices\InvoicesAttachmentsController;
+use App\Http\Controllers\Invoices\Reports\InvoiceReportController;
+use App\Http\Controllers\Invoices\Archives\InvoicesArchiefController;
+use App\Http\Controllers\Invoices\Attachments\InvoicesAttachmentsController;
 use App\Http\Controllers\Invoices\InvoicesController;
-use App\Http\Controllers\Invoices\InvoicesDetailsController;
+use App\Http\Controllers\Invoices\Details\InvoicesDetailsController;
 use App\Http\Controllers\Products\ProductController;
 use App\Http\Controllers\Sections\SectionController;
 use Illuminate\Support\Facades\Auth;
