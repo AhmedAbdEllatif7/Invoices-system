@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('invoices_attachments', function (Blueprint $table) {
+        Schema::create('invoice_attachments', function (Blueprint $table) {
             $table->integer('id')->unsigned()->autoIncrement();
             $table->string('file_name', 999);
             $table->string('invoice_number', 50);
@@ -32,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('invoices_attachments');
+        Schema::dropIfExists('invoice_attachments');
     }
 };

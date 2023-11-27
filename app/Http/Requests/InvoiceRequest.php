@@ -23,8 +23,10 @@ class InvoiceRequest extends FormRequest
      */
     public function rules()
     {
+        $id = $this->input('id'); // Assuming the ID is passed as 'id' in the request
+
         return [
-            'invoice_number'    => 'required|max:50|unique:invoices,invoice_number',
+            'invoice_number'    => 'required|max:50|unique:invoices,invoice_number,' . $id,
             'invoice_date'      => 'nullable|date',
             'due_date'          => 'nullable|date|after_or_equal:invoice_date',
             'product'           => 'required|max:50',

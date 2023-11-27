@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\Invoices\Reports\InvoiceReportController;
-use App\Http\Controllers\Invoices\Archives\InvoicesArchiefController;
+use App\Http\Controllers\Invoices\Archives\ArchiveInvoiceController;
 use App\Http\Controllers\Invoices\Attachments\InvoicesAttachmentsController;
 use App\Http\Controllers\Invoices\InvoicesController;
 use App\Http\Controllers\Invoices\Details\InvoicesDetailsController;
@@ -23,32 +23,46 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('auth.login');
-})->middleware('guest')->name('login');
+})->middleware('guest');
 
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
+
+######################################## Begin Invoices #############################################
+
+Route::resource('invoices', InvoicesController::class);
 Route::controller(InvoicesController::class)->group(function(){
-    Route::post('restore_invoice',  'restoreInvoice')->name('restore.invoice');  //Restore Invoice
     Route::get('show_print/{id}', 'showPrint')->name('show.print.invoice'); //Print Invoice
     Route::post('invoice_update_status/{id}', 'updateStatus')->name('update.status.invoice'); //Update Invoice Status
     Route::get('sections/{id}', 'getproducts'); //Get Product
-    Route::get('payed_invoices',  'showPayedInvoices'); //Show Payed Invoices
-    Route::get('unpayed_invoices', 'showUnPayedInvoices');  //Show Unpayed Invoices
-    Route::get('partial_payed_invoices',  'showPartialPayedInvoices');   //Show Partial Payed Invoices
+    Route::get('invoices/paid',  'viewPaidInvoices'); //Show paid Invoices
+    Route::get('invoices/unpaid', 'viewUnPaidInvoices');  //Show Unpaid Invoices
+    Route::get('invoices/partial-paid',  'viewPartialPaid');   //Show Partial paid Invoices
 
 });
+######################################## End Invoices #############################################
 
-#########################################################################################################################################
 
-Route::controller(InvoicesArchiefController::class)->group(function(){
-    Route::post('invoice_archiev',  'destroy')->name('archiev.invoice'); //Archiev Invoice
-    Route::post('invoice_delete_from_archiev',  'deleteFromArchiev')->name('delete.archiev.invoice'); //Deleting From Archiev
-    Route::resource('invoice_archievs', InvoicesArchiefController::class);//Show Archeif Invoices
+
+
+######################################## Begin Archive Invoices #############################################
+
+Route::prefix('invoices')->group(function () {
+    Route::get('archives', [ArchiveInvoiceController::class, 'index']);
+
+    Route::post('archive-invoice', [ArchiveInvoiceController::class, 'archive'])
+        ->name('archive.invoice');
+
+    Route::post('restore', [ArchiveInvoiceController::class, 'restoreInvoice'])
+        ->name('restore');
+
+    Route::post('delete-from-archive', [ArchiveInvoiceController::class, 'deleteFromArchive']);
 });
 
-#########################################################################################################################################
+######################################## End Archive Invoices #############################################
+
 
 Route::controller(InvoiceReportController::class)->group(function(){
     Route::get('clients_reports', 'searchClients'); //Show Clients Reports Page
@@ -71,8 +85,6 @@ Route::controller(InvoicesDetailsController::class)->group(function(){
 
 
 
-//Invoices
-Route::resource('invoices', InvoicesController::class);
 
 //Invoice Reports
 Route::resource('invoice_reports', InvoiceReportController::class);

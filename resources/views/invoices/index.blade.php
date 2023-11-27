@@ -212,8 +212,7 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <form action="{{url('invoice_archiev')}}" method="post">
-                            {{ method_field('post') }}
+                        <form action="{{url('archive-invoice')}}" method="post">
                             {{ csrf_field() }}
                             <div class="modal-body">
                                 <p>هل انت متاكد من عملية الأرشفة ؟</p><br>

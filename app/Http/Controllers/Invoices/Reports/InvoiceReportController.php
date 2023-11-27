@@ -18,7 +18,7 @@ class InvoiceReportController extends Controller
     public function index()
     {
         $invoices = Invoice::get();
-        return view('invoices.reports',compact('invoices'));
+        return view('invoices.reports.index',compact('invoices'));
 
     }
 
@@ -68,13 +68,13 @@ class InvoiceReportController extends Controller
                 {
                     $invoices = Invoice::get();
                     $type = $request->type;
-                    return view('invoices.reports',compact('type'))->with('details',$invoices);
+                    return view('invoices.reports.index',compact('type'))->with('details',$invoices);
                 }
                 else
                 {
                     $invoices = Invoice::select('*')->where('status','=', $request->type)->get();
                     $type = $request->type;
-                    return view('invoices.reports',compact('type'))->with('details',$invoices);
+                    return view('invoices.reports.index',compact('type'))->with('details',$invoices);
                 }
             }
         //في حالةتم اختيار تاريخ
@@ -84,7 +84,7 @@ class InvoiceReportController extends Controller
                 $end_at   = date($request->end_at);
                 $type     = $request->type;
                 $invoices = Invoice::whereBetween('invoice_date',[$start_at,$end_at])->where('status','=',$request->type)->get();
-                return view('invoices.reports',compact('type','start_at','end_at','invoices'))->with('details',$invoices);
+                return view('invoices.reports.index',compact('type','start_at','end_at','invoices'))->with('details',$invoices);
             }
         }
 
@@ -92,7 +92,7 @@ class InvoiceReportController extends Controller
         // في البحث برقم الفاتورة
         else {
             $invoices = invoice::select('*')->where('invoice_number','=',$request->invoice_number)->get();
-            return view('invoices.reports',compact('invoices'))->with('details',$invoices);
+            return view('invoices.reports.index',compact('invoices'))->with('details',$invoices);
         }
     }
 
@@ -100,7 +100,7 @@ class InvoiceReportController extends Controller
     {
         $sections = Section::get();
         $products = Product::get();
-        return view('invoices.clients',compact('sections','products'));
+        return view('invoices.clients.index',compact('sections','products'));
     }
 
 
@@ -128,14 +128,14 @@ class InvoiceReportController extends Controller
         {
 
             $invoices = Invoice::where('section_id', '=' ,$request->section_id)->where( 'product', '=', $request->product)->get();
-            return view('invoices.clients',compact('invoices','sections','products','section'));
+            return view('invoices.clients.index',compact('invoices','sections','products','section'));
         }
         else
         {
             $start_at = $request->start_at;
             $end_at   = $request->end_at;
             $invoices = Invoice::whereBetween('invoice_date', [$start_at,$end_at])->where('section_id', '=' ,$request->section_id)->where( 'product', '=', $request->product)->get();
-            return view('invoices.clients',compact('invoices','sections','products'));
+            return view('invoices.clients.index',compact('invoices','sections','products'));
 
         }
     }

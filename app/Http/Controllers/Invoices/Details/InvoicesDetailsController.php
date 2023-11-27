@@ -83,7 +83,7 @@ class InvoicesDetailsController extends Controller
     {
 
         //Get Id Of Seleted Invoice
-        $id2 = DB::table('invoices_details')->where('invoice_id', '=' , $id)->latest()->first()->id;
+        $id2 = DB::table('invoice_details')->where('invoice_id', '=' , $id)->latest()->first()->id;
 
 
         //Get Invoice Details By It's Id
@@ -94,14 +94,14 @@ class InvoicesDetailsController extends Controller
 
 
         //Get All Attachments Of It
-        $invoice_attachments = DB::table('invoices_attachments')->where('invoice_id', $id)->where('deleted_at','=',null)->get();
+        $invoice_attachments = DB::table('invoice_attachments')->where('invoice_id', $id)->where('deleted_at','=',null)->get();
 
 
         // $noti_ID = DB::table('notifications')->where('data->invoice_id', $id)->first()->id;
         // $t = DB::table('notifications')->where('id',$noti_ID)->update(['read_at' => now()]);
 
 
-        return view('invoices.invoice_details', compact('invoice_details','all_invoices_details','invoice_attachments'));
+        return view('invoices.details.index', compact('invoice_details','all_invoices_details','invoice_attachments'));
 
     }
 }

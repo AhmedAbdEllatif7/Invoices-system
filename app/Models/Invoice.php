@@ -37,11 +37,11 @@ class Invoice extends Model
 
     public function attachment()
     {
-        return $this->hasMany('App\Models\Invoices_Attachments' , 'invoice_id' , 'id', 'id');
+        return $this->hasMany(InvoiceAttachment::class , 'invoice_id' , 'id', 'id');
     }
 
     public function details()
     {
-        return $this->hasMany(Invoices_Details::class, 'invoice_id');
+        return $this->hasMany(InvoiceDetail::class, 'invoice_id');
     }
 }

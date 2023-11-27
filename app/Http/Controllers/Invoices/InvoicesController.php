@@ -85,7 +85,7 @@ class InvoicesController extends Controller
             session()->flash('error');
             return redirect()->back();
         }
-        return view('invoices.changeInvoiceStatus',compact('invoice'));
+        return view('invoices.status.index',compact('invoice'));
     }
 
 
@@ -182,24 +182,24 @@ class InvoicesController extends Controller
 
 
 
-    public function showPayedInvoices()
+    public function viewPaidInvoices()
     {
         $invoices = Invoice::where('value_status',1)->get();
-        return view('invoices.payed_invoices',compact('invoices'));
+        return view('invoices.paid.index',compact('invoices'));
     }
 
 
-    public function showUnPayedInvoices()
+    public function viewUnPaidInvoices()
     {
         $invoices = Invoice::where('value_status',0)->get();
-        return view('invoices.unpayed_invoices',compact('invoices'));
+        return view('invoices.unPaid.index',compact('invoices'));
     }
 
 
-    public function showPartialPayedInvoices()
+    public function viewPartialPaid()
     {
         $invoices = Invoice::where('value_status',2)->get();
-        return view('invoices.partial_payed_invoices',compact('invoices'));
+        return view('invoices.partialPaid.index',compact('invoices'));
     }
 
 
@@ -237,42 +237,8 @@ class InvoicesController extends Controller
     {
         $invoice = Invoice::findOrFail($id);
         
-        return view('invoices.print_invoice',compact('invoice'));
+        return view('invoices.print.index',compact('invoice'));
     }
 
 }
 
-
-// $url = 'http://127.0.0.1:8000/invoice/details/'.$invoice_id;
-        // Mail::to('uaahmed89@gmail.com')->send(new AddInvoice($url));
-        // //Send Notification
-
-        // $user = User::where('id', 17)->get();
-        // $invoice_id = Invoice::latest()->first()->id;
-
-        // Notification::send($user, new InvoiceCreated($invoice_id));
-
-
-
-
-        // $invoice_number = $request->invoice_number;
-        // //Validation
-        // $this->validate($request,
-        // [
-        //     'invoice_number'    => 'required|numeric|unique:invoices,invoice_number,'.$id_invoice,
-        //     'invoice_date'      => 'required|date',
-        //     'due_date'          => 'required|date',
-        //     'product'           => 'required',
-        //     'amount_collection' => 'required|numeric',
-        //     'amount_commission' => 'required|numeric',
-
-        // ],
-        // [
-        //     'invoice_number.required'    => 'عفوا يجب إدخال رقم الفاتورة' ,
-        //     'invoice_date.required'      => 'عفوا يجب إدخال تاريخ الفاتورة',
-        //     'due_date.required'          => 'عفوا يجب إدخال تاريخ الإستحقاق',
-        //     'product.required'           => 'عفوا يجب إدخال إاسم المنتيج',
-        //     'amount_collection.required' => 'عفوا يجب إدخال مبلغ التحصيل',
-        //     'amount_commission.required' => 'عفوا يجب إدخال مبلغ العمولة',
-        // ]
-        // );

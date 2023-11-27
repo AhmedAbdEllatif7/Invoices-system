@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('title')
-    الفواتير الغير مدفوعة
+    الفواتير المدفوعة
 @endsection
 @section('css')
     <!-- Internal Data table css -->
@@ -19,7 +19,7 @@
         <div class="my-auto">
             <div class="d-flex">
                 <h4 class="content-title mb-0 my-auto">الفواتير</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/ الفواتير
-                    الغير مدفوعة </span>
+                    المدفوعة</span>
             </div>
         </div>
 
@@ -28,46 +28,48 @@
 @endsection
 @section('content')
     <!-- row -->
-    @if (session()->has('delete'))
-    <script>
-        window.onload = function() {
-            notif({
-                msg: 'تم حذف الفاتورة بنجاح',
-                type: 'success'
-            })
-        }
-    </script>
-@endif
-
-
-@if (session()->has('archiev'))
-<script>
-    window.onload = function() {
-        notif({
-            msg: 'تمت أرشفة الفاتورة بنجاح',
-            type: 'success'
-        })
-    }
-</script>
-@endif
-
-
-
-@if (session()->has('edit'))
-    <script>
-        window.onload = function() {
-            notif({
-                msg: 'تم تغيير حالة الدفع بنجاح',
-                type: 'success'
-            })
-        }
-    </script>
-@endif
     <div class="row">
+        @if (session()->has('delete'))
+            <script>
+                window.onload = function() {
+                    notif({
+                        msg: 'تم حذف الفاتورة بنجاح',
+                        type: 'success'
+                    })
+                }
+            </script>
+        @endif
+
+
+        @if (session()->has('archiev'))
+        <script>
+            window.onload = function() {
+                notif({
+                    msg: 'تمت أرشفة الفاتورة بنجاح',
+                    type: 'success'
+                })
+            }
+        </script>
+    @endif
+
+
+
+        @if (session()->has('edit'))
+            <script>
+                window.onload = function() {
+                    notif({
+                        msg: 'تم تغيير حالة الدفع بنجاح',
+                        type: 'success'
+                    })
+                }
+            </script>
+        @endif
+
+    <div class="row row-sm">
         <div class="col-xl-12">
             <div class="card">
                 <div class="card-header pb-0">
-                    <a href="invoices/create" class="modal-effect btn btn-sm btn-primary"
+                    <a href="{{route('invoices.create')}}" class="modal-effect btn btn-sm btn-primary"
                         style="color:white; width:100px;margin-right: 18px;"><i class="fas fa-plus"></i>&nbsp; اضافة
                         فاتورة</a>
                 </div>
@@ -143,6 +145,12 @@
                                                         data-section="{{ $invoice->section->section_name }}"
                                                         data-toggle="modal" href="#modaldemo9" title="حذف"><i
                                                             class="fas fa-trash-alt"></i>&nbsp;&nbsp;&nbsp;حذف</button>
+
+                                                            <button style="width: 150px" class="btn btn-outline-info btn-sm"
+                                                        data-id="{{ $invoice->id }}"
+                                                        data-invoice_number="{{ $invoice->invoice_number }}"
+                                                        data-section="{{ $invoice->section->section_name }}"
+                                                        data-toggle="modal" href="#modaldemo10" title="أرشفة"><i class="text-warning fas fa-exchange-alt">&nbsp;&nbsp;&nbsp;أرشفة</i></button>
                                                 </div>
                                             </div>
                                         </td>
@@ -184,13 +192,46 @@
                 </div>
             </div>
         </div>
+
+
+        <!-- archief -->
+        <div class="modal fade" id="modaldemo10" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">أرشفة الفاتورة</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="{{url('invoice_archiev')}}" method="post">
+                    {{ method_field('post') }}
+                    {{ csrf_field() }}
+                    <div class="modal-body">
+                        <p>هل انت متاكد من عملية الأرشفة ؟</p><br>
+                        <input type="hidden" name="id" id="id" value="">
+                        <label>رقم الفاتورة</label>
+                        <input class="form-control" name="invoice_number" id="invoice_number" type="text"
+                            readonly>
+                        <label>اسم القسم</label>
+                        <input class="form-control" name="section" id="section" type="text" readonly>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">الغاء</button>
+                        <button type="submit" class="btn btn-success">تاكيد</button>
+                    </div>
         <!-- row closed -->
     </div>
     <!-- Container closed -->
     </div>
-</div>
-</div>
     </div>
+    </div>
+    </div>
+    </div>
+</div>
+
+
     <!-- main-content closed -->
 @endsection
 @section('js')
@@ -228,7 +269,20 @@
         })
     </script>
 
-    
+<script>
+    $('#modaldemo10').on('show.bs.modal', function(event) {
+        var button = $(event.relatedTarget)
+        var id = button.data('id')
+        var invoice_number = button.data('invoice_number')
+        var section = button.data('section')
+        var modal = $(this)
+        modal.find('.modal-body #id').val(id);
+        modal.find('.modal-body #invoice_number').val(invoice_number);
+        modal.find('.modal-body #section').val(section);
+
+    })
+</script>
+
 <!--Internal  Notify js -->
 <script src="{{ URL::asset('assets/plugins/notify/js/notifIt.js') }}"></script>
 <script src="{{ URL::asset('assets/plugins/notify/js/notifit-custom.js') }}"></script>
