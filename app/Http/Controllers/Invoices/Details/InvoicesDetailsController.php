@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Invoices;
+namespace App\Http\Controllers\Invoices\Details;
 
 use App\Http\Controllers\Controller;
-use App\Models\Invoices_Attachments;
-use App\Models\Invoices_Details;
+use App\Models\InvoiceAttachment;
+use App\Models\InvoiceDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -33,26 +33,26 @@ class InvoicesDetailsController extends Controller
     }
 
 
-    public function show(Invoices_Details $invoices_Details)
+    public function show(InvoiceDetail $invoices_Details)
     {
         //
     }
 
 
-    public function edit(Invoices_Details $invoices_Details)
+    public function edit(InvoiceDetail $invoices_Details)
     {
         //
     }
 
 
-    public function update(Request $request, Invoices_Details $invoices_Details)
+    public function update(Request $request, InvoiceDetail $invoices_Details)
     {
         //
     }
 
     public function destroy(Request $request)
     {
-        $invoice_attachment = Invoices_Attachments::find($request->attachment_id);
+        $invoice_attachment = InvoiceAttachment::find($request->attachment_id);
         $invoice_attachment->delete();
 
         Storage::disk('public_uploads')->delete($request->invoice_number.'/'.$request->file_name);
@@ -87,10 +87,10 @@ class InvoicesDetailsController extends Controller
 
 
         //Get Invoice Details By It's Id
-        $invoice_details  = Invoices_Details::find($id2);
+        $invoice_details  = InvoiceDetail::find($id2);
 
         //Get All Invoice Details of it
-        $all_invoices_details = Invoices_Details::where('invoice_id',$id)->get();
+        $all_invoices_details = InvoiceDetail::where('invoice_id',$id)->get();
 
 
         //Get All Attachments Of It

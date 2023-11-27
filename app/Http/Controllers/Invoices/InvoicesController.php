@@ -6,15 +6,13 @@ use App\Events\InvoiceCreated;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\InvoiceRequest;
 use App\Models\Invoice;
-use App\Models\Invoices_Attachments;
-use App\Models\Invoices_Details;
+use App\Models\InvoiceAttachment;
+use App\Models\InvoiceDetail;
 use App\Models\Section;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Filesystem\Filesystem; // Import the Filesystem class
-use Illuminate\Support\Facades\File; // Import the File facade
+
 use Throwable;
 
 class InvoicesController extends Controller
@@ -168,7 +166,7 @@ class InvoicesController extends Controller
 
     private function updateInvoiceDetails($request , $valueStatus)
     {
-        Invoices_Details::create([
+        InvoiceDetail::create([
             'invoice_id'    => $request->id,
             'invoice_number'=> $request->invoice_number,
             'product'       => $request->product,
@@ -225,12 +223,12 @@ class InvoicesController extends Controller
 
     private function restoreInvoiceDetailsById($id)
     {
-        return Invoices_Details::withTrashed()->where('invoice_id', $id)->restore();
+        return InvoiceDetail::withTrashed()->where('invoice_id', $id)->restore();
     }
 
     private function restoreInvoiceAttachmentsById($id)
     {
-        return Invoices_Attachments::withTrashed()->where('invoice_id', $id)->restore();
+        return InvoiceAttachment::withTrashed()->where('invoice_id', $id)->restore();
     }
 
 

@@ -3,7 +3,7 @@
 namespace App\Observers;
 
 use App\Models\Invoice;
-use App\Models\Invoices_Attachments;
+use App\Models\InvoiceAttachment;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
@@ -75,7 +75,7 @@ class InvoiceObserver
 
     private function deleteAttachments($id)
     {
-        $attachments = Invoices_Attachments::where('invoice_id', $id)->get();
+        $attachments = InvoiceAttachment::where('invoice_id', $id)->get();
 
         if ($attachments->isNotEmpty()) {
             foreach ($attachments as $attachment) {

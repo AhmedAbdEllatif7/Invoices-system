@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Invoices;
+namespace App\Http\Controllers\Invoices\Attachments;
 
 use App\Http\Controllers\Controller;
-use App\Models\Invoices_Attachments;
+use App\Models\InvoiceAttachment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -43,7 +43,7 @@ class InvoicesAttachmentsController extends Controller
         $file_name = $file->getClientOriginalName();
 
         //Save Attachment In Database
-        Invoices_Attachments::create([
+        InvoiceAttachment::create([
             'file_name'      => $file_name,
             'invoice_number' => $request->invoice_number,
             'invoice_id'     => $request->invoice_id,
@@ -57,24 +57,24 @@ class InvoicesAttachmentsController extends Controller
     }
 
 
-    public function show(Invoices_Attachments $invoices_Attachments)
+    public function show(InvoiceAttachment $invoices_Attachments)
     {
 
     }
 
 
-    public function edit(Invoices_Attachments $invoices_Attachments)
-    {
-        //
-    }
-
-
-    public function update(Request $request, Invoices_Attachments $invoices_Attachments)
+    public function edit(InvoiceAttachment $invoices_Attachments)
     {
         //
     }
 
-    public function destroy(Invoices_Attachments $invoices_Attachments)
+
+    public function update(Request $request, InvoiceAttachment $invoices_Attachments)
+    {
+        //
+    }
+
+    public function destroy(InvoiceAttachment $invoices_Attachments)
     {
         //
     }

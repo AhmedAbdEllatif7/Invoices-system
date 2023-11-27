@@ -4,7 +4,7 @@ namespace App\Listeners;
 
 use App\Events\InvoiceCreated;
 use App\Models\Invoice;
-use App\Models\Invoices_Attachments;
+use App\Models\InvoiceAttachment;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Auth;
@@ -44,7 +44,7 @@ class StoreInvoiceAttachments
             'invoice_id' => Invoice::latest()->first()->id,
         ];
 
-        Invoices_Attachments::create($attachmentData);
+        InvoiceAttachment::create($attachmentData);
 
         // Move File
         $file->move(public_path('Attachments/' . $invoiceData['invoice_number']), $file_name);
