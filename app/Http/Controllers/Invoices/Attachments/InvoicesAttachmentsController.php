@@ -14,15 +14,15 @@ class InvoicesAttachmentsController extends Controller
     }
 
 
-    public function index()
-    {
-        //
-    }
+    // public function index()
+    // {
+    //     //
+    // }
 
-    public function create()
-    {
-        //
-    }
+    // public function create()
+    // {
+    //     //
+    // }
 
 
     public function store(Request $request)
@@ -57,25 +57,25 @@ class InvoicesAttachmentsController extends Controller
     }
 
 
-    public function show(InvoiceAttachment $invoices_Attachments)
-    {
+    // public function show(InvoiceAttachment $invoices_Attachments)
+    // {
 
-    }
-
-
-    public function edit(InvoiceAttachment $invoices_Attachments)
-    {
-        //
-    }
+    // }
 
 
-    public function update(Request $request, InvoiceAttachment $invoices_Attachments)
-    {
-        //
-    }
+    // public function edit(InvoiceAttachment $invoices_Attachments)
+    // {
+    //     //
+    // }
 
-    public function destroy(InvoiceAttachment $invoices_Attachments)
-    {
-        //
-    }
+
+    // public function update(Request $request, InvoiceAttachment $invoices_Attachments)
+    // {
+    //     //
+    // }
+
+    // public function destroy(InvoiceAttachment $invoices_Attachments)
+    // {
+    //     //
+    // }
 }

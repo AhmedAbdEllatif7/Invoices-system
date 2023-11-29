@@ -39,6 +39,7 @@
                         class="angle fe fe-chevron-down"></i></a>
                 <ul class="slide-menu">
                     <li><a class="slide-item" href="{{ url('/' . ($page = 'invoices')) }}">قائمة الفواتير</a></li>
+                    <li><a class="slide-item" href="{{ url('/' . ($page = 'invoices/create')) }}">إضافة فاتورة</a></li>
                     <li><a class="slide-item" href="{{ url('/' . ($page = 'invoices/paid')) }}">الفواتير المدفوعة</a></li>
                     <li><a class="slide-item" href="{{ url('/' . ($page = 'invoices/unpaid')) }}">الفواتير الغير مدفوعة</a>
                     </li>

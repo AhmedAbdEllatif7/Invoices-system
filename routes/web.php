@@ -29,8 +29,7 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-
-######################################## Begin Invoices #############################################
+############################################ Begin Invoices #################################################
 
 Route::resource('invoices', InvoicesController::class);
 Route::controller(InvoicesController::class)->group(function(){
@@ -42,27 +41,24 @@ Route::controller(InvoicesController::class)->group(function(){
     Route::get('invoices/partial-paid',  'viewPartialPaid');   //Show Partial paid Invoices
 
 });
-######################################## End Invoices #############################################
+############################################ End Invoices ####################################################
 
 
 
 
-######################################## Begin Archive Invoices #############################################
+############################################ Begin Archive Invoice ###########################################
 
-Route::prefix('invoices')->group(function () {
-    Route::get('archives', [ArchiveInvoiceController::class, 'index']);
+Route::get('archives' , [ArchiveInvoiceController::class , 'index']);
+Route::post('archive-invoice' , [ArchiveInvoiceController::class , 'archive'])->name('archive.invoice');
+Route::post('restore' , [ArchiveInvoiceController::class , 'restoreInvoice'])->name('restore');
+Route::post('delete-from-archive' , [ArchiveInvoiceController::class , 'deleteFromArchive']);
+############################################ End Archive Invoice #############################################
 
-    Route::post('archive-invoice', [ArchiveInvoiceController::class, 'archive'])
-        ->name('archive.invoice');
 
-    Route::post('restore', [ArchiveInvoiceController::class, 'restoreInvoice'])
-        ->name('restore');
 
-    Route::post('delete-from-archive', [ArchiveInvoiceController::class, 'deleteFromArchive']);
-});
 
-######################################## End Archive Invoices #############################################
 
+############################################ Begin Report Invoice #############################################
 
 Route::controller(InvoiceReportController::class)->group(function(){
     Route::get('clients_reports', 'searchClients'); //Show Clients Reports Page
@@ -71,9 +67,13 @@ Route::controller(InvoiceReportController::class)->group(function(){
     Route::post('search_invoice_reports',  'search'); //Searching For Invoice
 
 });
+############################################ End Report Invoice ################################################
 
 
-#########################################################################################################################################
+
+
+
+############################################ Begin Details Invoice #############################################
 
 Route::controller(InvoicesDetailsController::class)->group(function(){
     Route::get("view_file/{invoice_number}/{file_name}",  'openFile'); //View The Attachments
@@ -82,6 +82,8 @@ Route::controller(InvoicesDetailsController::class)->group(function(){
     Route::get('invoice/details/{id}',  'showDetails')->name('show.details');
 
 });
+############################################ End Details Invoice #############################################
+
 
 
 

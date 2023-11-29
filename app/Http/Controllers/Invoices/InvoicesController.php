@@ -1,12 +1,10 @@
 <?php
 
 namespace App\Http\Controllers\Invoices;
-use Illuminate\Routing\Controller;
 use App\Events\InvoiceCreated;
-// use App\Http\Controllers\Controller;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\InvoiceRequest;
 use App\Models\Invoice;
-use App\Models\InvoiceAttachment;
 use App\Models\InvoiceDetail;
 use App\Models\Section;
 use Illuminate\Http\Request;
@@ -99,7 +97,7 @@ class InvoicesController extends Controller
 
 
 
-
+    //There are an operations done in the InvoiceObserver
     public function update(InvoiceRequest $request)
     {
         $invoiceValidatedData = $request->validated();
@@ -122,7 +120,7 @@ class InvoicesController extends Controller
 
 
 
-
+    //There are an operations done in the InvoiceObserver
     public function destroy(Request $request)
     {
         $id = $request->id;
@@ -157,14 +155,14 @@ class InvoicesController extends Controller
         
         $invoice->update($data);
         
-        $this->updateInvoiceDetails($request , $data['value_status']);
+        $this->updateDetails($request , $data['value_status']);
         
         session()->flash('edit');
         return redirect('invoices');
     }
 
 
-    private function updateInvoiceDetails($request , $valueStatus)
+    private function updateDetails($request , $valueStatus)
     {
         InvoiceDetail::create([
             'invoice_id'    => $request->id,
@@ -204,32 +202,6 @@ class InvoicesController extends Controller
 
 
 
-    public function restoreInvoice(Request $request)
-    {
-        $id = $request->id;
-
-        $this->restoreInvoiceById($id);
-        $this->restoreInvoiceDetailsById($id);
-        $this->restoreInvoiceAttachmentsById($id);
-
-        session()->flash('restore');
-        return redirect()->back();
-    }
-
-    private function restoreInvoiceById($id)
-    {
-        return Invoice::withTrashed()->where('id', $id)->restore();
-    }
-
-    private function restoreInvoiceDetailsById($id)
-    {
-        return InvoiceDetail::withTrashed()->where('invoice_id', $id)->restore();
-    }
-
-    private function restoreInvoiceAttachmentsById($id)
-    {
-        return InvoiceAttachment::withTrashed()->where('invoice_id', $id)->restore();
-    }
 
 
 

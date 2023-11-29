@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Models\Invoice;
 use App\Models\InvoiceAttachment;
+use App\Models\InvoiceDetail;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
@@ -20,7 +21,7 @@ class InvoiceObserver
 
 
 
-    private function updateDetails($invoice)
+    public static function updateDetails($invoice)
     {
         $invoice->details()->update([
             'invoice_number' => $invoice->invoice_number,
@@ -50,7 +51,7 @@ class InvoiceObserver
     }
 
 
-    private function renameAttachmentFolder($oldInvoiceNumber, $newInvoiceNumber)
+    public static function renameAttachmentFolder($oldInvoiceNumber, $newInvoiceNumber)
     {
         $oldFolder = public_path('Attachments/' . $oldInvoiceNumber);
         $newFolder = public_path('Attachments/' . $newInvoiceNumber);
@@ -73,9 +74,9 @@ class InvoiceObserver
     }
 
 
-    private function deleteAttachments($id)
+    public static function deleteAttachments($id)
     {
-        $attachments = InvoiceAttachment::where('invoice_id', $id)->get();
+        $attachments = InvoiceAttachment::withTrashed()->where('invoice_id', $id)->get();
 
         if ($attachments->isNotEmpty()) {
             foreach ($attachments as $attachment) {
@@ -95,19 +96,31 @@ class InvoiceObserver
     
     public function restored(Invoice $invoice)
     {
-        //
+        $this->restoreInvoiceDetailsById($invoice->id);
+        $this->restoreInvoiceAttachmentsById($invoice->id);
+        $this->removeArchivedFromFolderName($invoice->invoice_number);
     }
 
-
-
-    
-    public function forceDeleted(Invoice $invoice)
+    private function removeArchivedFromFolderName($invoiceNumber)
     {
+        $archivedFolder = public_path('Attachments/' . $invoiceNumber . ' (Archived)');
+        $nonArchivedFolder = public_path('Attachments/' . $invoiceNumber);
+
+        if (file_exists($archivedFolder)) {
+            rename($archivedFolder, $nonArchivedFolder);
+        }
     }
 
 
-    
+    private function restoreInvoiceDetailsById($id)
+    {
+        return InvoiceDetail::onlyTrashed()->where('invoice_id', $id)->restore();
+    }
 
-    
+    private function restoreInvoiceAttachmentsById($id)
+    {
+        return InvoiceAttachment::onlyTrashed()->where('invoice_id', $id)->restore();
+    }
+
 
 }
