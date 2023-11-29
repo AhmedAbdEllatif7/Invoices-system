@@ -44,7 +44,6 @@ class InvoicesController extends Controller
         try {
             DB::beginTransaction();
     
-            // Save Invoice In DataBase
             $invoiceValidatedData = $request->validated();
     
             $invoiceValidatedData['status'] = 'غير مدفوعة';
@@ -54,11 +53,11 @@ class InvoicesController extends Controller
                 $invoiceValidatedData['note'] = $request->note;
             }
     
+            // Save Invoice In DataBase
             $invoice = Invoice::create($invoiceValidatedData);
     
-            // Save Invoice_Details and Invoice_Attachments In Datbase
-            $file = $request->file('file');
-            event(new InvoiceCreated($invoice, $file));
+            // Save Invoice Details and Invoice Attachments In Datbase
+            event(new InvoiceCreated($invoice));
     
             DB::commit();
     
@@ -74,15 +73,10 @@ class InvoicesController extends Controller
     }
 
 
-
+    //Change Status
     public function show($id)
     {
-        $invoice = Invoice::where('id',$id)->first();
-        if(!$invoice)
-        {
-            session()->flash('error');
-            return redirect()->back();
-        }
+        $invoice = Invoice::findOrFail($id);
         return view('invoices.status.index',compact('invoice'));
     }
 

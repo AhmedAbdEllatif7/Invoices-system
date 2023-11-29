@@ -29,25 +29,25 @@ class StoreInvoiceAttachments
      */
     public function handle(InvoiceCreated $event)
 {
-    $file = $event->file;
-    $invoiceData = $event->invoiceData;
+    $invoice = $event->invoiceData;
 
     // Check if a file was uploaded
-    if ($file) {
+    if (request()->hasFile('file')) {
+        $file = request()->file('file');
         $file_name = $file->getClientOriginalName();
 
         // Store Data In DataBase
         $attachmentData = [
             'file_name' => $file_name,
-            'invoice_number' => $invoiceData['invoice_number'],
+            'invoice_number' => $invoice->invoice_number,
             'created_by' => Auth::user()->name,
-            'invoice_id' => Invoice::latest()->first()->id,
+            'invoice_id' => $invoice->id,
         ];
 
         InvoiceAttachment::create($attachmentData);
 
         // Move File
-        $file->move(public_path('Attachments/' . $invoiceData['invoice_number']), $file_name);
+        $file->move(public_path('Attachments/' . $invoice->invoice_number), $file_name);
     }
 }
 

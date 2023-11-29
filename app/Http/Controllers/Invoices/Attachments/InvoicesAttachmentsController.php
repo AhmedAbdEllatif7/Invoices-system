@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Invoices\Attachments;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\FileUploadRequest;
 use App\Models\InvoiceAttachment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class InvoicesAttachmentsController extends Controller
 {
@@ -14,30 +16,13 @@ class InvoicesAttachmentsController extends Controller
     }
 
 
-    // public function index()
-    // {
-    //     //
-    // }
-
-    // public function create()
-    // {
-    //     //
-    // }
 
 
-    public function store(Request $request)
+    public function store(FileUploadRequest $request)
     {
-        //Validation
-        $this->validate($request,[
-            'file_name' => 'mimes:pdf,jpg,jpeg,png',
-        ],
-        [
-            'file_name.mimes' => '  عفوا يجب ان تكون صيغة المرفق من نوع   pdf,png,pneg,jpg'
-        ]
-        );
-
+        
         //Get File From Request
-        $file = $request->file('file_name');
+        $file = $request->file('file');
 
         //Get File From Request By It's Extension
         $file_name = $file->getClientOriginalName();
@@ -57,25 +42,59 @@ class InvoicesAttachmentsController extends Controller
     }
 
 
-    // public function show(InvoiceAttachment $invoices_Attachments)
-    // {
-
-    // }
 
 
-    // public function edit(InvoiceAttachment $invoices_Attachments)
-    // {
-    //     //
-    // }
 
 
-    // public function update(Request $request, InvoiceAttachment $invoices_Attachments)
-    // {
-    //     //
-    // }
+    public function destroy(Request $request)
+    {
+    $invoiceAttachment = InvoiceAttachment::findOrFail($request->attachment_id);
 
-    // public function destroy(InvoiceAttachment $invoices_Attachments)
-    // {
-    //     //
-    // }
+    if ($invoiceAttachment) {
+        // Construct the file path
+        $filePath = $request->invoice_number . '/' . $request->file_name;
+
+        if (Storage::disk('public_uploads')->exists($filePath)) {
+            // Delete the file
+            Storage::disk('public_uploads')->delete($filePath);
+
+            // Check if the containing folder is now empty
+            $directoryPath = $request->invoice_number;
+            $filesInDirectory = Storage::disk('public_uploads')->files($directoryPath);
+
+            if (empty($filesInDirectory)) {
+                // Delete the directory if it's empty
+                Storage::disk('public_uploads')->deleteDirectory($directoryPath);
+            }
+        }
+
+        // Delete the attachment record from the database
+        $invoiceAttachment->delete();
+
+        session()->flash('delete', 'تم حذف المرفق بنجاح');
+    } else {
+        session()->flash('error', 'لم يتم العثور على المرفق');
+    }
+
+    return redirect()->back();
+    }
+
+
+
+    public function openFile($invoice_number, $file_name)
+    {
+
+        $file = Storage::disk('public_uploads')->path($invoice_number.'/'.$file_name);
+        return response()->file($file);
+    }
+
+
+
+    public function downloadFile($invoice_number, $file_name)
+    {
+        $file = Storage::disk('public_uploads')->path($invoice_number.'/'.$file_name);
+        return response()->download($file);
+    }
+
+
 }

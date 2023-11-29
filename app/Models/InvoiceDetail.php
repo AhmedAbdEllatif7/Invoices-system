@@ -31,4 +31,10 @@ class InvoiceDetail extends Model
     {
         return $this->belongsTo('App\Models\Section','section_id','id');
     }
+
+
+    public function invoices()
+    {
+        return $this->belongsTo(Invoice::class,'invoice_id');
+    }
 }

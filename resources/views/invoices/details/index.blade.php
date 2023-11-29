@@ -110,30 +110,30 @@
                                                         </thead>
                                                         <tbody>
                                                             <tr>
-                                                                <td>{{ $invoice_details->id }}</td>
-                                                                <td>{{ $invoice_details->invoice_id }}</td>
-                                                                <td>{{ $invoice_details->invoice_number }}</td>
-                                                                <td>{{ $invoice_details->product }}</td>
-                                                                <td>{{ $invoice_details->section->section_name }}</td>
+                                                                <td>{{ $invoiceDetails->id }}</td>
+                                                                <td>{{ $invoiceDetails->invoice_id }}</td>
+                                                                <td>{{ $invoiceDetails->invoice_number }}</td>
+                                                                <td>{{ $invoiceDetails->product }}</td>
+                                                                <td>{{ $invoiceDetails->section->section_name }}</td>
                                                                 <td>
-                                                                    @if ($invoice_details->value_status == 0)
+                                                                    @if ($invoiceDetails->value_status == 0)
                                                                         <span class="badge badge pill badge-danger">
-                                                                            {{ $invoice_details->status }}
+                                                                            {{ $invoiceDetails->status }}
                                                                         </span>
-                                                                    @elseif ($invoice_details->value_status == 1)
+                                                                    @elseif ($invoiceDetails->value_status == 1)
                                                                         <span class="badge badge pill badge-success">
-                                                                            {{ $invoice_details->status }}
+                                                                            {{ $invoiceDetails->status }}
                                                                         </span>
                                                                     @else
                                                                         <span class="badge badge pill badge-warning">
-                                                                            {{ $invoice_details->status }}
+                                                                            {{ $invoiceDetails->status }}
                                                                         </span>
                                                                     @endif
                                                                 </td>
-                                                                <td>{{ $invoice_details->payment_date }}</td>
-                                                                <td>{{ $invoice_details->note }}</td>
-                                                                <td>{{ $invoice_details->created_at }}</td>
-                                                                <td>{{ $invoice_details->updated_at }}</td>
+                                                                <td>{{ $invoiceDetails->payment_date }}</td>
+                                                                <td>{{ $invoiceDetails->note }}</td>
+                                                                <td>{{ $invoiceDetails->created_at }}</td>
+                                                                <td>{{ $invoiceDetails->updated_at }}</td>
                                                             </tr>
                                                         </tbody>
                                                     </table>
@@ -160,33 +160,33 @@
                                                         </thead>
                                                         <tbody>
                                                             <?php $i = 0; ?>
-                                                            @foreach ($all_invoices_details as $all_invoices_detail)
+                                                            @foreach ($AllInvoiceDetails as $allInvoicesDetail)
                                                                 <tr>
                                                                     <?php $i++; ?>
                                                                     <td>{{ $i }}</td>
-                                                                    <td>{{ $all_invoices_detail->invoice_number }}</td>
-                                                                    <td>{{ $all_invoices_detail->product }}</td>
-                                                                    <td>{{ $all_invoices_detail->section->section_name }}
+                                                                    <td>{{ $allInvoicesDetail->invoice_number }}</td>
+                                                                    <td>{{ $allInvoicesDetail->product }}</td>
+                                                                    <td>{{ $allInvoicesDetail->section->section_name }}
                                                                     </td>
                                                                     <td>
-                                                                        @if ($all_invoices_detail->value_status == 0)
+                                                                        @if ($allInvoicesDetail->value_status == 0)
                                                                             <span class="badge badge pill badge-danger">
-                                                                                {{ $all_invoices_detail->status }}
+                                                                                {{ $allInvoicesDetail->status }}
                                                                             </span>
-                                                                        @elseif ($all_invoices_detail->value_status == 1)
+                                                                        @elseif ($allInvoicesDetail->value_status == 1)
                                                                             <span class="badge badge pill badge-success">
-                                                                                {{ $all_invoices_detail->status }}
+                                                                                {{ $allInvoicesDetail->status }}
                                                                             </span>
                                                                         @else
                                                                             <span class="badge badge pill badge-warning">
-                                                                                {{ $all_invoices_detail->status }}
+                                                                                {{ $allInvoicesDetail->status }}
                                                                             </span>
                                                                         @endif
                                                                     </td>
-                                                                    <td>{{ $all_invoices_detail->payment_date }}</td>
-                                                                    <td>{{ $all_invoices_detail->note }}</td>
-                                                                    <td>{{ $all_invoices_detail->created_at }}</td>
-                                                                    <td>{{ $all_invoices_detail->user }}</td>
+                                                                    <td>{{ $allInvoicesDetail->payment_date }}</td>
+                                                                    <td>{{ $allInvoicesDetail->note }}</td>
+                                                                    <td>{{ $allInvoicesDetail->created_at }}</td>
+                                                                    <td>{{ $allInvoicesDetail->user }}</td>
                                                                 </tr>
                                                             @endforeach
                                                         </tbody>
@@ -202,16 +202,17 @@
                                                 <div class="card-body">
                                                     <p class="text-danger">* صيغة المرفق pdf, jpeg ,.jpg , png </p>
                                                     <h5 class="card-title">اضافة مرفقات</h5>
-                                                    <form method="post" action="{{ route('store.attachment') }}"
+                                                    <form method="post" action="{{ route('attachments.store') }}"
                                                         enctype="multipart/form-data">
+                                                        @method('POST')
                                                         {{ csrf_field() }}
                                                         <div class="custom-file">
                                                             <input type="file" class="custom-file-input"
-                                                                id="customFile" name="file_name" required>
+                                                                id="customFile" name="file" required>
                                                             <input type="hidden" id="customFile" name="invoice_number"
-                                                                value="{{ $invoice_details->invoice_number }}">
+                                                                value="{{ $invoiceDetails->invoice_number }}">
                                                             <input type="hidden" id="invoice_id" name="invoice_id"
-                                                                value="{{ $invoice_details->invoice_id }}">
+                                                                value="{{ $invoiceDetails->invoice_id }}">
                                                             <label class="custom-file-label" for="customFile">حدد
                                                                 المرفق</label>
                                                         </div><br><br>
@@ -237,13 +238,13 @@
                                                         </thead>
                                                         <tbody>
                                                             <?php $i = 0; ?>
-                                                            @foreach ($invoice_attachments as $invoice_attachment)
+                                                            @foreach ($AllInvoiceAttachments as $invoiceAttachment)
                                                                 <tr>
                                                                     <?php $i++; ?>
                                                                     <td>{{ $i }}</td>
-                                                                    <td>{{ $invoice_attachment->file_name }}</td>
-                                                                    <td>{{ $invoice_attachment->created_by }}</td>
-                                                                    <td>{{ $invoice_attachment->created_at }}</td>
+                                                                    <td>{{ $invoiceAttachment->file_name }}</td>
+                                                                    <td>{{ $invoiceAttachment->created_by }}</td>
+                                                                    <td>{{ $invoiceAttachment->created_at }}</td>
                                                                     <td colspan="2">
                                                                         <div class="dropdown">
                                                                             <button
@@ -259,26 +260,26 @@
                                                                             
                                                                             <div class="dropdown-menu tx-13">
                                                                                 @php
-                                                                                $file = public_path('Attachments/' . $invoice_attachment->invoice_number . '/' . $invoice_attachment->file_name);
+                                                                                $file = public_path('Attachments/' . $invoiceAttachment->invoice_number . '/' . $invoiceAttachment->file_name);
                                                                                 @endphp
 
                                                                             @if (file_exists($file))
                                                                                 <a style="width: 150px"
                                                                                     class=" btn btn-outline-success btn-sm"
-                                                                                    href="{{ url('view_file/' . $invoice_details->invoice_number . '/' . $invoice_attachment->file_name) }}"><i
+                                                                                    href="{{ url('attachments/view/' . $invoiceDetails->invoice_number . '/' . $invoiceAttachment->file_name) }}"><i
                                                                                         class="fas fa-eye"></i>&nbsp;عرض</a>
 
                                                                                 <a style="width: 150px"
                                                                                     class=" btn btn-outline-info btn-sm"
-                                                                                    href="{{ url('download_file/' . $invoice_details->invoice_number . '/' . $invoice_attachment->file_name) }}"><i
+                                                                                    href="{{ url('attachments/download/' . $invoiceDetails->invoice_number . '/' . $invoiceAttachment->file_name) }}"><i
                                                                                     class="fas fa-download"></i>&nbsp;
                                                                                 تحميل</a>
                                                                                 @endif
                                                                                 <button style="width: 150px"
                                                                                 class="btn btn-outline-danger btn-sm "
-                                                                                data-attachment_id="{{ $invoice_attachment->id }}"
-                                                                                data-file_name="{{ $invoice_attachment->file_name }}"
-                                                                                data-invoice_number="{{ $invoice_attachment->invoice_number }}"
+                                                                                data-attachment_id="{{ $invoiceAttachment->id }}"
+                                                                                data-file_name="{{ $invoiceAttachment->file_name }}"
+                                                                                data-invoice_number="{{ $invoiceAttachment->invoice_number }}"
                                                                                 data-toggle="modal"
                                                                                 data-target="#modaldemo9"><i class="fas fa-trash-alt">
                                                                             </i>&nbsp;حذف</button>
@@ -316,7 +317,8 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <form action="{{ url('delete_file') }}" method="post">
+                        <form action="{{ route('attachments.destroy', 'test') }}" method="post">
+                            @method('DELETE')
                             {{ csrf_field() }}
                             <div class="modal-body">
                                 <p>هل انت متاكد من عملية الحذف ؟</p><br>

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Invoice;
 use App\Models\Product;
 use App\Models\Section;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class InvoiceReportController extends Controller
@@ -23,91 +24,68 @@ class InvoiceReportController extends Controller
     }
 
 
-    public function create()
-    {
 
-    }
-
-
-    public function store(Request $request)
-    {
-        //
-    }
-
-    public function show($id)
-    {
-        //
-    }
-
-
-    public function edit($id)
-    {
-        //
-    }
-
-
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-
-    public function destroy(Request $request)
-    {
-
-    }
 
     public function search(Request $request)
     {
-        if($request->rdio == 1)
-        {
-        //في حالة لم يتم اختيار تاريخ
-            if($request->type && $request->start_at=='' &&  $request->end_at=='')
-            {
-                if($request->type == 'الكل')
-                {
-                    $invoices = Invoice::get();
-                    $type = $request->type;
-                    return view('invoices.reports.index',compact('type'))->with('details',$invoices);
-                }
-                else
-                {
-                    $invoices = Invoice::select('*')->where('status','=', $request->type)->get();
-                    $type = $request->type;
-                    return view('invoices.reports.index',compact('type'))->with('details',$invoices);
-                }
-            }
-        //في حالةتم اختيار تاريخ
-            else
-            {
-                $start_at = date($request->start_at);
-                $end_at   = date($request->end_at);
-                $type     = $request->type;
-                $invoices = Invoice::whereBetween('invoice_date',[$start_at,$end_at])->where('status','=',$request->type)->get();
-                return view('invoices.reports.index',compact('type','start_at','end_at','invoices'))->with('details',$invoices);
-            }
-        }
-
-
-        // في البحث برقم الفاتورة
-        else {
-            $invoices = invoice::select('*')->where('invoice_number','=',$request->invoice_number)->get();
-            return view('invoices.reports.index',compact('invoices'))->with('details',$invoices);
+        if ($request->radio == 1) {
+            return $this->searchByTypeAndDate($request);
+        } else {
+            return $this->searchByInvoiceNumber($request);
         }
     }
+    
+    private function searchByTypeAndDate(Request $request)
+    {
+        if ($request->type && $request->start_at == '' && $request->end_at == '') {
+            return $this->searchByType($request);
+        } else {
+            return $this->searchByDateAndType($request);
+        }
+    }
+    
+    private function searchByType(Request $request)
+    {
+        $type = $request->type;
+        $invoices = $type == 'الكل' ? Invoice::get() : Invoice::where('status', $type)->get();
+    
+        return view('invoices.reports.index', compact('type'))->with('details', $invoices);
+    }
+    
+    private function searchByDateAndType(Request $request)
+    {
+        $startAt = Carbon::parse($request->start_at);
+        $endAt = Carbon::parse($request->end_at)->endOfDay();
+        $type = $request->type;
+    
+        $invoices = Invoice::whereBetween('invoice_date', [$startAt, $endAt])
+            ->where('status', $type)
+            ->get();
+    
+        return view('invoices.reports.index', compact('type', 'startAt', 'endAt', 'invoices'))->with('details', $invoices);
+    }
+    
+    private function searchByInvoiceNumber(Request $request)
+    {
+        $invoiceNumber = $request->invoice_number;
+        $invoices = Invoice::where('invoice_number', $invoiceNumber)->get();
+    
+        return view('invoices.reports.index', compact('invoices'))->with('details', $invoices);
+    }
+    
 
     public function showClients()
     {
-        $sections = Section::get();
-        $products = Product::get();
+        $sections = Section::all();
+        $products = Product::all();
         return view('invoices.clients.index',compact('sections','products'));
     }
 
 
     public function searchClients(Request $request)
     {
-        $sections = Section::get();
-        $products = Product::get();
+        $sections = Section::all();
+        $products = Product::all();
         $section = $request->section_id;
         if($section == 1)
         {

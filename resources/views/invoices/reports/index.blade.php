@@ -61,7 +61,7 @@
 
                     <div class="col-lg-3">
                         <label class="rdiobox">
-                            <input checked name="rdio" type="radio" value="1" id="type_div"> <span>بحث بنوع
+                            <input checked name="radio" type="radio" value="1" id="type_div"> <span>بحث بنوع
                                 الفاتورة</span></label>
                     </div>
 
@@ -75,8 +75,8 @@
                     <div class="row">
 
                         <div class="col-lg-3 mg-t-20 mg-lg-t-0" id="type">
-                            <p class="mg-b-10">تحديد نوع الفواتير</p><select class="form-control select2" name="type"
-                                required>
+                            <p class="mg-b-10">تحديد نوع الفواتير</p>
+                            <select class="form-control select2" name="type" required>
                                 <option value="{{ $type ?? 'حدد نوع الفواتير' }}" selected>
                                     {{ $type ?? 'حدد نوع الفواتير' }}
                                 </option>
@@ -160,7 +160,7 @@
                                         <td>{{ $invoice->due_date }}</td>
                                         <td>{{ $invoice->product }}</td>
                                         <td>
-                                            <a href="{{ route('show.details', $invoice->id) }}">
+                                            <a href="{{ route('details.index', ['id' => $invoice->id]) }}">
                                                 {{ $invoice->section->section_name }}
                                             </a>
                                         </td>

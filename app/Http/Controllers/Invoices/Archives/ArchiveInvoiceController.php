@@ -8,8 +8,7 @@ use App\Models\InvoiceAttachment;
 use App\Models\InvoiceDetail;
 use App\Observers\InvoiceObserver;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Log;
+
 
 class ArchiveInvoiceController extends Controller
 {
@@ -98,11 +97,5 @@ class ArchiveInvoiceController extends Controller
         session()->flash('restore');
         return redirect()->back();
     }
-
-
-
-    
-
-
 
 }

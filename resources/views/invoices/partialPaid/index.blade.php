@@ -101,7 +101,7 @@
                                         <td>{{ $invoice->due_date }}</td>
                                         <td>{{ $invoice->product }}</td>
                                         <td>
-                                            <a href="{{ route('show.details', $invoice->id) }}">
+                                            <a href="{{ route('details.index', ['id' => $invoice->id]) }}">
                                                 {{ $invoice->section->section_name }}
                                             </a>
                                         </td>
@@ -129,21 +129,33 @@
                                                 <div class="dropdown-menu tx-13">
 
                                                     <a style="width: 150px" class=" btn btn-outline-warning btn-sm"
-                                                        href="{{ url('invoice_edit/' . $invoice->id) }}"><i
+                                                        href="{{ route('invoices.edit' , $invoice->id) }}"><i
                                                             class="fas fa-edit"></i>&nbsp;&nbsp;&nbsp;تعديل</a>
 
-                                                    <a style="width: 150px" class=" btn btn-outline-success btn-sm"
-                                                        href="{{ url('show_invoice_status/' . $invoice->id) }}"><i
-                                                            class="fas fa-money-bill"></i>&nbsp;&nbsp;&nbsp;تغيير حالة
-                                                        الدفع</a>
-
-
-                                                    <button style="width: 150px" class="btn btn-outline-danger btn-sm"
-                                                        data-id="{{ $invoice->id }}"
-                                                        data-invoice_number="{{ $invoice->invoice_number }}"
-                                                        data-section="{{ $invoice->section->section_name }}"
-                                                        data-toggle="modal" href="#modaldemo9" title="حذف"><i
-                                                            class="fas fa-trash-alt"></i>&nbsp;&nbsp;&nbsp;حذف</button>
+                                                            <a style="width: 150px; height:30px; font-size:13px" class=" btn btn-outline-success btn-sm"
+                                                            href="{{ route('invoices.show' , $invoice->id) }}"><i
+                                                                class="fas fa-money-bill"></i>&nbsp;&nbsp;&nbsp;تغيير حالة
+                                                            الدفع</a>
+    
+    
+                                                        <button style="width: 150px;  height:30px; font-size:13px" class="btn btn-outline-danger btn-sm"
+                                                            data-id="{{ $invoice->id }}"
+                                                            data-invoice_number="{{ $invoice->invoice_number }}"
+                                                            data-section="{{ $invoice->section->section_name }}"
+                                                            data-toggle="modal" href="#modaldemo9" title="حذف"><i
+                                                                class="fas fa-trash-alt"></i>&nbsp;&nbsp;&nbsp;حذف</button>
+    
+    
+                                                        <button style="width: 150px;  height:30px; font-size:13px" class="btn btn-outline-info btn-sm"
+                                                            data-id="{{ $invoice->id }}"
+                                                            data-invoice_number="{{ $invoice->invoice_number }}"
+                                                            data-section="{{ $invoice->section->section_name }}"
+                                                            data-toggle="modal" href="#modaldemo10" title="أرشفة"><i class="text-warning fas fa-exchange-alt">&nbsp;&nbsp;&nbsp;أرشفة</i></button>
+    
+    
+                                                            <a style="width: 150px; height:30px ; font-size:13px" class=" btn btn-outline-success btn-sm"
+                                                            href="{{ url('show_print/' . $invoice->id) }}"><i
+                                                                class="fas fa-print"></i>&nbsp;&nbsp;&nbsp;طباعة</a>
                                                 </div>
                                             </div>
                                         </td>
@@ -166,9 +178,9 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form action="{{ url('invoice_delete') }}" method="post">
-                        {{ method_field('post') }}
-                        {{ csrf_field() }}
+                    <form action="{{ route('invoices.destroy','test') }}" method="post">
+                        @method('DELETE') <!-- Use DELETE method for deletion -->
+                        @csrf
                         <div class="modal-body">
                             <p>هل انت متاكد من عملية الحذف ؟</p><br>
                             <input type="hidden" name="id" id="id" value="">

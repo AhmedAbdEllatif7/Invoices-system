@@ -37,6 +37,8 @@ class InvoiceRequest extends FormRequest
             'value_vat'         => 'required|numeric',
             'rate_vat'          => 'required|max:999',
             'total'             => 'required|numeric',
+            'file'              => 'nullable|mimes:pdf,jpeg,jpg,png', 
+
         ];
     }
 
@@ -53,6 +55,8 @@ class InvoiceRequest extends FormRequest
             'Value_VAT.required' => 'عفوا يجب إدخال قيمة ضريبة القيمة المضافة',
             'Rate_VAT.required' => 'عفوا يجب إدخال نسبة ضريبة القيمة المضافة',
             'Total.required' => 'عفوا يجب إدخال رقم الإجمالي شامل الضريبة',
+            'file.mimes' => 'عفوا يجب أن يكون نوع الملف pdf أو jpeg أو jpg أو png',
+
         ];
     }
 }

@@ -12,12 +12,10 @@ class InvoiceCreated
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $invoiceData;
-    public $file;
 
-    public function __construct($invoiceData , $file)
+    public function __construct($invoiceData)
     {
         $this->invoiceData = $invoiceData;
-        $this->file = $file;
     }
 
     

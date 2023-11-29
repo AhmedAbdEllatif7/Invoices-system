@@ -100,9 +100,10 @@
                                         <td>{{ $invoice->due_date }}</td>
                                         <td>{{ $invoice->product }}</td>
                                         <td>
-                                            <a href="{{ route('show.details', $invoice->id) }}">
+                                            <a href="{{ route('details.index', ['id' => $invoice->id]) }}">
                                                 {{ $invoice->section->section_name }}
                                             </a>
+                                            
                                         </td>
                                         <td>{{ $invoice->discount }}</td>
                                         <td>{{ $invoice->rate_vat }}</td>

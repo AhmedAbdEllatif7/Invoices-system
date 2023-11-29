@@ -40,10 +40,10 @@
                 <ul class="slide-menu">
                     <li><a class="slide-item" href="{{ url('/' . ($page = 'invoices')) }}">قائمة الفواتير</a></li>
                     <li><a class="slide-item" href="{{ url('/' . ($page = 'invoices/create')) }}">إضافة فاتورة</a></li>
-                    <li><a class="slide-item" href="{{ url('/' . ($page = 'invoices/paid')) }}">الفواتير المدفوعة</a></li>
-                    <li><a class="slide-item" href="{{ url('/' . ($page = 'invoices/unpaid')) }}">الفواتير الغير مدفوعة</a>
+                    <li><a class="slide-item" href="{{ url('/' . ($page = 'paid-invoices')) }}">الفواتير المدفوعة</a></li>
+                    <li><a class="slide-item" href="{{ url('/' . ($page = 'unpaid-invoices')) }}">الفواتير الغير مدفوعة</a>
                     </li>
-                    <li><a class="slide-item" href="{{ url('/' . ($page = 'invoices/partial-paid')) }}">الفواتير المدفوعة
+                    <li><a class="slide-item" href="{{ url('/' . ($page = 'partial-paid-invoices')) }}">الفواتير المدفوعة
                             جزئيا</a></li>
                     <li><a class="slide-item" href="{{ url('/' . ($page = 'archives')) }}">أرشيف الفواتير</a></li>
                 </ul>
@@ -59,7 +59,7 @@
                     </svg>&nbsp;&nbsp;<span class="side-menu__label">التقارير</span><i
                         class="angle fe fe-chevron-down"></i></a>
                 <ul class="slide-menu">
-                    <li><a class="slide-item" href="{{ url('/' . ($page = 'invoice_reports')) }}">تقارير الفواتير</a></li>
+                    <li><a class="slide-item" href="{{ url('/' . ($page = 'reports')) }}">تقارير الفواتير</a></li>
                     <li><a class="slide-item" href="{{ url('/' . ($page = 'clients_reports')) }}">تقارير العملاء</a></li>
                 </ul>
             </li>
