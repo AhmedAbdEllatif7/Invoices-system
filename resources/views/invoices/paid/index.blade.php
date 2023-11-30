@@ -123,41 +123,36 @@
                                         <td>
                                             <div class="dropdown">
                                                 <button style="width: 102px;font-size: 12px;padding: 8px;"
-                                                    aria-expanded="false" aria-haspopup="true"
-                                                    class="btn ripple btn-primary" data-toggle="dropdown"
-                                                    id="dropdownMenuButton" type="button">العمليات<i
-                                                        class="fas fa-caret-down ml-1"></i></button>
+                                                aria-expanded="false" aria-haspopup="true"
+                                                class="btn ripple btn-primary" data-toggle="dropdown"
+                                                id="dropdownMenuButton" type="button">العمليات
+                                                <i class="fas fa-caret-down ml-1"></i>
+                                                </button>
+
                                                 <div class="dropdown-menu tx-13">
+                                                <a style="width: 150px" class=" btn btn-outline-warning btn-sm"
+                                                href="{{ route('invoices.edit' , $invoice->id) }}">
+                                                <i class="fas fa-edit"></i> &nbsp;&nbsp;&nbsp; تعديل 
+                                                </a>
 
-                                                    <a style="width: 150px" class=" btn btn-outline-warning btn-sm"
-                                                    href="{{ route('invoices.edit' , $invoice->id) }}"><i
-                                                        class="fas fa-edit"></i>&nbsp;&nbsp;&nbsp;تعديل</a>
+                                                <a style="width: 150px; height:30px; font-size:13px" class=" btn btn-outline-success btn-sm"
+                                                href="{{ route('invoices.show' , $invoice->id) }}">
+                                                <i class="fas fa-money-bill"></i> &nbsp;&nbsp;&nbsp; تغيير حالة الدفع
+                                                </a>
 
-                                                        <a style="width: 150px; height:30px; font-size:13px" class=" btn btn-outline-success btn-sm"
-                                                        href="{{ route('invoices.show' , $invoice->id) }}"><i
-                                                            class="fas fa-money-bill"></i>&nbsp;&nbsp;&nbsp;تغيير حالة
-                                                        الدفع</a>
+                                                <a style="width: 150px; height:30px ; font-size:13px" class=" btn btn-outline-success btn-sm"
+                                                href="{{ url('show_print/' . $invoice->id) }}">
+                                                <i class="fas fa-print"></i> &nbsp;&nbsp;&nbsp; طباعة
+                                                </a>
 
-
-                                                    <button style="width: 150px;  height:30px; font-size:13px" class="btn btn-outline-danger btn-sm"
+                                                <button style="width: 150px;  height:30px; font-size:13px" class="btn btn-outline-info btn-sm"
                                                         data-id="{{ $invoice->id }}"
                                                         data-invoice_number="{{ $invoice->invoice_number }}"
                                                         data-section="{{ $invoice->section->section_name }}"
-                                                        data-toggle="modal" href="#modaldemo9" title="حذف"><i
-                                                            class="fas fa-trash-alt"></i>&nbsp;&nbsp;&nbsp;حذف</button>
-
-
-                                                    <button style="width: 150px;  height:30px; font-size:13px" class="btn btn-outline-info btn-sm"
-                                                        data-id="{{ $invoice->id }}"
-                                                        data-invoice_number="{{ $invoice->invoice_number }}"
-                                                        data-section="{{ $invoice->section->section_name }}"
-                                                        data-toggle="modal" href="#modaldemo10" title="أرشفة"><i class="text-warning fas fa-exchange-alt">&nbsp;&nbsp;&nbsp;أرشفة</i></button>
-
-
-                                                        <a style="width: 150px; height:30px ; font-size:13px" class=" btn btn-outline-success btn-sm"
-                                                        href="{{ url('show_print/' . $invoice->id) }}"><i
-                                                            class="fas fa-print"></i>&nbsp;&nbsp;&nbsp;طباعة</a>
-                                                </div>
+                                                        data-toggle="modal" href="#modaldemo10" title="أرشفة">
+                                                        <i class="text-warning fas fa-exchange-alt">&nbsp;&nbsp;&nbsp;أرشفة</i>
+                                                </button>
+                                            </div>
                                             </div>
                                         </td>
                                     </tr>
@@ -165,36 +160,6 @@
                             </tbody>
                         </table>
                     </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="modal fade" id="modaldemo9" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">حذف المنتج</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <form action="{{ route('invoices.destroy','test') }}" method="post">
-                        @method('DELETE') <!-- Use DELETE method for deletion -->
-                        @csrf
-                        <div class="modal-body">
-                            <p>هل انت متاكد من عملية الحذف ؟</p><br>
-                            <input type="hidden" name="id" id="id" value="">
-                            <label>رقم الفاتورة</label>
-                            <input class="form-control" name="invoice_number" id="invoice_number" type="text" readonly>
-                            <label>اسم القسم</label>
-                            <input class="form-control" name="section" id="section" type="text" readonly>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">الغاء</button>
-                            <button type="submit" class="btn btn-danger">تاكيد</button>
-                        </div>
-                    </form>
                 </div>
             </div>
         </div>
@@ -211,8 +176,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form action="{{url('invoice_archiev')}}" method="post">
-                    {{ method_field('post') }}
+                <form action="{{url('archive-invoice')}}" method="post">
                     {{ csrf_field() }}
                     <div class="modal-body">
                         <p>هل انت متاكد من عملية الأرشفة ؟</p><br>
@@ -261,19 +225,7 @@
     <!--Internal  Datatable js -->
     <script src="{{ URL::asset('assets/js/table-data.js') }}"></script>
 
-    <script>
-        $('#modaldemo9').on('show.bs.modal', function(event) {
-            var button = $(event.relatedTarget)
-            var id = button.data('id')
-            var invoice_number = button.data('invoice_number')
-            var section = button.data('section')
-            var modal = $(this)
-            modal.find('.modal-body #id').val(id);
-            modal.find('.modal-body #invoice_number').val(invoice_number);
-            modal.find('.modal-body #section').val(section);
 
-        })
-    </script>
 
 <script>
     $('#modaldemo10').on('show.bs.modal', function(event) {
