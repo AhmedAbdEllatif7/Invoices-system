@@ -35,7 +35,7 @@ class ArchiveInvoiceController extends Controller
         $this->deleteInvoice($id);
 
         session()->flash('archiev');
-        return redirect()->back();
+        return redirect()->route('archives.index');
     }
     
 
@@ -78,7 +78,7 @@ class ArchiveInvoiceController extends Controller
     {
         $id = $request->id;
         InvoiceObserver::deleteAttachments($id);
-        Invoice::where('id', $id)->forceDelete();
+        Invoice::onlyTrashed()->where('id', $id)->forceDelete();
 
         session()->flash('delete');
         return redirect()->back();

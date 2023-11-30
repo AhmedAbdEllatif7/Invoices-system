@@ -124,8 +124,9 @@
                                                 <button style="width: 102px;font-size: 12px;padding: 8px;"
                                                     aria-expanded="false" aria-haspopup="true"
                                                     class="btn ripple btn-primary" data-toggle="dropdown"
-                                                    id="dropdownMenuButton" type="button">العمليات<i
-                                                        class="fas fa-caret-down ml-1"></i></button>
+                                                    id="dropdownMenuButton" type="button">العمليات
+                                                    <i class="fas fa-caret-down ml-1"></i>
+                                                </button>
                                                 <div class="dropdown-menu tx-13">
 
                                                     <a style="width: 150px; height:30px; font-size:13px" class=" btn btn-outline-info btn-sm"
@@ -154,7 +155,7 @@
 
 
                                                         <a style="width: 150px; height:30px ; font-size:13px" class=" btn btn-outline-success btn-sm"
-                                                        href="{{ url('show_print/' . $invoice->id) }}"><i
+                                                        href="{{ url('show-print/' . $invoice->id) }}"><i
                                                             class="fas fa-print"></i>&nbsp;&nbsp;&nbsp;طباعة</a>
                                             </div>
                                         </td>

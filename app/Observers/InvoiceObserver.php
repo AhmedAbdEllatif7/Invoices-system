@@ -85,8 +85,12 @@ class InvoiceObserver
             }
 
             $directory = public_path('Attachments/' . $attachments->first()->invoice_number);
-            if (File::exists($directory)) {
+            if (File::exists($directory) ) {
                 File::deleteDirectory($directory);
+            }
+            else if(File::exists($directory.' (Archived)'))
+            {
+                File::deleteDirectory($directory.' (Archived)');
             }
         }
     }

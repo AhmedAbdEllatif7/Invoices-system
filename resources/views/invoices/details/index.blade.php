@@ -110,6 +110,7 @@
                                                         </thead>
                                                         <tbody>
                                                             <tr>
+                                                                @if (isset($invoiceDetails))
                                                                 <td>{{ $invoiceDetails->id }}</td>
                                                                 <td>{{ $invoiceDetails->invoice_id }}</td>
                                                                 <td>{{ $invoiceDetails->invoice_number }}</td>
@@ -134,6 +135,9 @@
                                                                 <td>{{ $invoiceDetails->note }}</td>
                                                                 <td>{{ $invoiceDetails->created_at }}</td>
                                                                 <td>{{ $invoiceDetails->updated_at }}</td>
+                                                                @else
+                                                                <td colspan="10">No invoice details found.</td>
+                                                            @endif
                                                             </tr>
                                                         </tbody>
                                                     </table>
@@ -300,8 +304,6 @@
                                     </div>
                                 </div>
                             </div>
-
-
                         </div>
                     </div>
                 </div>

@@ -60,7 +60,7 @@
                         class="angle fe fe-chevron-down"></i></a>
                 <ul class="slide-menu">
                     <li><a class="slide-item" href="{{ url('/' . ($page = 'reports')) }}">تقارير الفواتير</a></li>
-                    <li><a class="slide-item" href="{{ url('/' . ($page = 'clients_reports')) }}">تقارير العملاء</a></li>
+                    <li><a class="slide-item" href="{{ url('/' . ($page = 'clients')) }}">تقارير العملاء</a></li>
                 </ul>
             </li>
 

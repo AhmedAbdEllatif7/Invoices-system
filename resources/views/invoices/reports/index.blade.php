@@ -55,10 +55,8 @@
 
             <div class="card-header pb-0">
 
-                <form action="{{ url('search_invoice_reports') }}" method="POST" role="search" autocomplete="off">
-                    {{ csrf_field() }}
-
-
+                <form action="{{ route('search.reports') }}" method="POST">
+                    @csrf
                     <div class="col-lg-3">
                         <label class="rdiobox">
                             <input checked name="radio" type="radio" value="1" id="type_div"> <span>بحث بنوع
@@ -67,7 +65,7 @@
 
 
                     <div class="col-lg-3 mg-t-20 mg-lg-t-0">
-                        <label class="rdiobox"><input name="rdio" value="2" type="radio"><span>بحث برقم
+                        <label class="rdiobox"><input name="radio" value="2" type="radio"><span>بحث برقم
                                 الفاتورة
                             </span></label>
                     </div><br><br>
@@ -147,6 +145,7 @@
                                     <th class="border-bottom-0">الاجمالي</th>
                                     <th class="border-bottom-0">الحالة</th>
                                     <th class="border-bottom-0">ملاحظات</th>
+                                    <th class="border-bottom-0">العمليات</th>
 
                                 </tr>
                             </thead>
@@ -178,6 +177,47 @@
                                             @endif
                                         </td>
                                         <td>{{ $invoice->note }}</td>
+                                        <td>
+                                            <div class="dropdown">
+                                                <button style="width: 102px;font-size: 12px;padding: 8px;"
+                                                    aria-expanded="false" aria-haspopup="true"
+                                                    class="btn ripple btn-primary" data-toggle="dropdown"
+                                                    id="dropdownMenuButton" type="button">العمليات
+                                                    <i class="fas fa-caret-down ml-1"></i>
+                                                </button>
+                                                <div class="dropdown-menu tx-13">
+
+                                                    <a style="width: 150px; height:30px; font-size:13px" class=" btn btn-outline-info btn-sm"
+                                                        href="{{ route('invoices.edit' , $invoice->id) }}"><i
+                                                            class="fas fa-edit"></i>&nbsp;&nbsp;&nbsp;تعديل</a>
+
+                                                    <a style="width: 150px; height:30px; font-size:13px" class=" btn btn-outline-success btn-sm"
+                                                        href="{{ route('invoices.show' , $invoice->id) }}"><i
+                                                            class="fas fa-money-bill"></i>&nbsp;&nbsp;&nbsp;تغيير حالة
+                                                        الدفع</a>
+
+
+                                                    <button style="width: 150px;  height:30px; font-size:13px" class="btn btn-outline-danger btn-sm"
+                                                        data-id="{{ $invoice->id }}"
+                                                        data-invoice_number="{{ $invoice->invoice_number }}"
+                                                        data-section="{{ $invoice->section->section_name }}"
+                                                        data-toggle="modal" href="#modaldemo9" title="حذف"><i
+                                                            class="fas fa-trash-alt"></i>&nbsp;&nbsp;&nbsp;حذف</button>
+
+
+                                                    <button style="width: 150px;  height:30px; font-size:13px" class="btn btn-outline-info btn-sm"
+                                                        data-id="{{ $invoice->id }}"
+                                                        data-invoice_number="{{ $invoice->invoice_number }}"
+                                                        data-section="{{ $invoice->section->section_name }}"
+                                                        data-toggle="modal" href="#modaldemo10" title="أرشفة"><i class="text-warning fas fa-exchange-alt">&nbsp;&nbsp;&nbsp;أرشفة</i></button>
+
+
+                                                        <a style="width: 150px; height:30px ; font-size:13px" class=" btn btn-outline-success btn-sm"
+                                                        href="{{ url('show-print/' . $invoice->id) }}"><i
+                                                            class="fas fa-print"></i>&nbsp;&nbsp;&nbsp;طباعة</a>
+                                            </div>
+                                        </td>
+                                        </td>
                                 @endforeach
                             </tbody>
                         </table>
@@ -198,8 +238,8 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form action="{{ url('invoice_delete') }}" method="post">
-                        {{ method_field('post') }}
+                    <form action="{{ route('invoices.destroy' , 'test') }}" method="post">
+                        {{ method_field('delete') }}
                         {{ csrf_field() }}
                         <div class="modal-body">
                             <p>هل انت متاكد من عملية الحذف ؟</p><br>
@@ -232,7 +272,7 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form action="{{ url('invoice_archiev') }}" method="post">
+                    <form action="{{ route('archive.invoice') }}" method="post">
                         {{ method_field('post') }}
                         {{ csrf_field() }}
                         <div class="modal-body">

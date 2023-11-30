@@ -26,15 +26,15 @@ class InvoiceReportController extends Controller
 
 
 
-    public function search(Request $request)
-    {
+    public function searchReports(Request $request)
+    {        
         if ($request->radio == 1) {
             return $this->searchByTypeAndDate($request);
         } else {
             return $this->searchByInvoiceNumber($request);
         }
     }
-    
+
     private function searchByTypeAndDate(Request $request)
     {
         if ($request->type && $request->start_at == '' && $request->end_at == '') {
@@ -73,8 +73,9 @@ class InvoiceReportController extends Controller
         return view('invoices.reports.index', compact('invoices'))->with('details', $invoices);
     }
     
+    //احط كل العمليات لما اعمل سيرش 
 
-    public function showClients()
+    public function indexClients()
     {
         $sections = Section::all();
         $products = Product::all();

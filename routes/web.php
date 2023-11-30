@@ -35,8 +35,8 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::resource('invoices', InvoicesController::class);
 
 Route::controller(InvoicesController::class)->group(function(){
-    Route::get('show_print/{id}', 'showPrint')->name('show.print.invoice'); 
-    Route::post('invoice_update_status/{id}', 'updateStatus')->name('update.status.invoice'); 
+    Route::get('show-print/{id}', 'showPrint')->name('show.print.invoice'); 
+    Route::post('invoice-update-status/{id}', 'updateStatus')->name('update.status.invoice'); 
     Route::get('sections/{id}', 'getproducts'); //Get Product
     Route::get('paid-invoices',  'viewPaidInvoices'); 
     Route::get('unpaid-invoices', 'viewUnPaidInvoices');  
@@ -66,6 +66,7 @@ Route::delete("attachments/destroy" , 'destroy')->name('attachments.destroy');
 Route::get("attachments/view/{invoice_number}/{file_name}" , 'openFile')->name('attachments.view');
 Route::get("attachments/download/{invoice_number}/{file_name}" , 'downloadFile')->name('attachments.download');
 });
+
 ############################################ End Attachments Invoice #########################################
 
 
@@ -76,7 +77,7 @@ Route::get("attachments/download/{invoice_number}/{file_name}" , 'downloadFile')
 
 ############################################ Begin Archive Invoice ###########################################
 
-Route::get('archives' , [ArchiveInvoiceController::class , 'index']);
+Route::get('archives' , [ArchiveInvoiceController::class , 'index'])->name('archives.index');
 Route::post('archive-invoice' , [ArchiveInvoiceController::class , 'archive'])->name('archive.invoice');
 Route::post('restore' , [ArchiveInvoiceController::class , 'restoreInvoice'])->name('restore');
 Route::post('delete-from-archive' , [ArchiveInvoiceController::class , 'deleteFromArchive']);
@@ -89,13 +90,12 @@ Route::post('delete-from-archive' , [ArchiveInvoiceController::class , 'deleteFr
 
 ############################################ Begin Report Invoice #############################################
 
-// Route::resource('invoice_reports', InvoiceReportController::class);
 Route::controller(InvoiceReportController::class)->group(function(){
     Route::get('reports', 'index'); 
-    Route::get('clients_reports', 'searchClients'); 
-    Route::get('clients_reports', 'showClients'); 
-    Route::post('search_clients_reports',  'searchClients'); 
-    Route::post('search_invoice_reports',  'search'); 
+    Route::get('clients-reports', 'searchClients'); 
+    Route::get('clients', 'indexClients'); 
+    Route::post('search-clients-reports',  'searchClients'); 
+    Route::post('search-reports',  'searchReports')->name('search.reports'); 
 
 });
 
