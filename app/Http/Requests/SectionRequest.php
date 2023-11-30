@@ -21,8 +21,7 @@ class SectionRequest extends FormRequest
     {
          $id = request()->id; // Assuming the ID is passed as 'id' in the request
         return [
-            'section_name' => ['required','max:50', Rule::unique('sections')->ignore($id),
-            ],   
+            'section_name' => ['required','max:50', Rule::unique('sections')->ignore($id)],   
             'description' => 'nullable|string|max:255',
             'created_by' => 'nullable|string|max:100',
         ];

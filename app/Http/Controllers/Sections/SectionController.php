@@ -22,8 +22,8 @@ class SectionController extends Controller
 
     public function index()
     {
-        $sections = Section::get();
-        return view('sections.sections',compact('sections'));
+        $sections = Section::all();
+        return view('sections.index',compact('sections'));
     }
 
 

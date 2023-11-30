@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Products;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ProductRequest;
 use App\Models\Product;
 use App\Models\Section;
 use Illuminate\Http\Request;
@@ -16,82 +17,49 @@ class ProductController extends Controller
 
     public function index()
     {
-        $products = Product::get();
-        $sections = Section::get();
-        return view('products.products',compact('products','sections'));
+        $products = Product::all();
+        $sections = Section::all();
+        return view('products.index',compact('products','sections'));
     }
 
 
-    public function create()
+
+
+
+    public function store(ProductRequest $request)
     {
-        //
-    }
+        $validatedData = $request->validated();
 
+        Product::create($validatedData);
 
-    public function store(Request $request)
-    {
-
-         //Validation
-            $validated = $request->validate([
-                'product_name' => 'required|max:50|unique:products',
-                'section_id' => 'required',
-            ],
-            [
-                'product_name.required' => ' عفوا يجب إدخال أسم المنتج',
-                'product_name.unique' => ' عفوا هذا المنتج موجود بالفعل',
-                'product_name.max' => 'عفوا لقد تخطيت الحد الأقصي من الحروف',
-                'section_id.required' => ' عفوا يجب اختيار اسم القسم',
-            ]
-
-            );
-
-            Product::create([
-                'product_name' => $request->product_name,
-                'description' => $request->description,
-                'section_id' => $request->section_id,
-            ]);
         session()->flash('add_product');
         return redirect()->back();
     }
 
 
-    public function show(Product $product)
+
+
+
+    public function update(ProductRequest $request)
     {
-        //
-    }
+        $sectionId = Section::where('section_name',$request->section_name)->first()->id;
 
+        $productId = $request->id;
 
-    public function edit(Product $product)
-    {
-        //
-    }
+        $validatedData = $request->validated();
+        
+        $validatedData['section_id'] = $sectionId;
 
+        $product = Product::findorFail($productId);
 
-    public function update(Request $request)
-    {
-        $id = Section::where('section_name',$request->section_name)->first()->id;
-        $id2 = $request->id;
-        $validated = $request->validate([
-            'product_name' => 'required|max:50|unique:products,product_name,'.$id2,
-        ],
-        [
-            'product_name.required' => ' عفوا يجب إدخال أسم المنتج',
-            'product_name.unique' => ' عفوا هذا المنتج موجود بالفعل',
-            'product_name.max' => 'عفوا لقد تخطيت الحد الأقصي من الحروف',
-        ]
+        $product->update($validatedData);
 
-        );
-        $product = Product::findorFail($request->id);
-
-        $product = $product->update([
-            'product_name' => $request->product_name,
-            'description'  => $request->description,
-            'section_id'   => $id,
-        ]);
         session()->flash('edit');
         return back();
 
     }
+
+
 
 
     public function destroy(Request $request)
@@ -99,9 +67,11 @@ class ProductController extends Controller
 
         $id = $request->id;
 
-        $product = Product::find($id);
+        $product = Product::findOrFail($id);
         $product = $product->destroy($id);
         session()->flash('delete');
         return redirect()->back();
     }
+
+
 }
