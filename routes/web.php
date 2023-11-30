@@ -104,28 +104,21 @@ Route::controller(InvoiceReportController::class)->group(function(){
 
 
 
+############################################ Begin Section #############################################
 
-
-
-
-
-
-
-
-
-
-
-
-//Invoice Reports
-
-//Sections
 Route::resource('sections', SectionController::class);
 
-//Products
+############################################ End Section #############################################
+
+
+
+
+
+############################################ Begin Products #############################################
+
 Route::resource('products', ProductController::class);
 
-
-
+############################################ End Products #############################################
 
 
 
