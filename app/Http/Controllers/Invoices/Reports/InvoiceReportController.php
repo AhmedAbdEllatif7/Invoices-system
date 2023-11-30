@@ -73,7 +73,6 @@ class InvoiceReportController extends Controller
         return view('invoices.reports.index', compact('invoices'))->with('details', $invoices);
     }
     
-    //احط كل العمليات لما اعمل سيرش 
 
     public function indexClients()
     {
@@ -83,40 +82,43 @@ class InvoiceReportController extends Controller
     }
 
 
-    public function searchClients(Request $request)
+    public function searchClientReports(Request $request)
     {
-        $sections = Section::all();
+        $sections = Section::all(); // For Ajax purposes
         $products = Product::all();
-        $section = $request->section_id;
-        if($section == 1)
-        {
-            $section = 'البنك الأهلي';
-        }
 
-        else if($section == 2)
-        {
-            $section = 'البنك الرياض';
-        }
+        $sectionId = $request->section_id;
+        $sectionName = $this->getSectionName($sectionId);
 
-        else
-        {
-            $section = 'البنك البلاد';
-        }
-        //في حالة البحث بدون تاريخ
-        if($request->section_id && $request->strat_at == '' && $request->end_at == '')
-        {
+        $invoices = $this->filterInvoices($request);
 
-            $invoices = Invoice::where('section_id', '=' ,$request->section_id)->where( 'product', '=', $request->product)->get();
-            return view('invoices.clients.index',compact('invoices','sections','products','section'));
-        }
-        else
-        {
-            $start_at = $request->start_at;
-            $end_at   = $request->end_at;
-            $invoices = Invoice::whereBetween('invoice_date', [$start_at,$end_at])->where('section_id', '=' ,$request->section_id)->where( 'product', '=', $request->product)->get();
-            return view('invoices.clients.index',compact('invoices','sections','products'));
-
-        }
+        return view('invoices.clients.index', compact('invoices', 'sections', 'products', 'sectionName'));
     }
+
+    private function getSectionName($sectionId)
+    {
+        $sections = config('sections');
+        return $sections[$sectionId] ?? 'Unknown Section';
+    }
+
+    private function filterInvoices($request)
+    {
+        $query = Invoice::query();
+
+        if ($request->start_at && $request->end_at) {
+            $query->whereBetween('invoice_date', [$request->start_at, $request->end_at]);
+        }
+
+        if ($request->section_id) {
+            $query->where('section_id', $request->section_id);
+        }
+
+        if ($request->product) {
+            $query->where('product', $request->product);
+        }
+
+        return $query->get();
+    }
+
 }
 

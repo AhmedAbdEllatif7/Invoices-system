@@ -94,7 +94,7 @@ Route::controller(InvoiceReportController::class)->group(function(){
     Route::get('reports', 'index'); 
     Route::get('clients-reports', 'searchClients'); 
     Route::get('clients', 'indexClients'); 
-    Route::post('search-clients-reports',  'searchClients'); 
+    Route::post('search-clients-reports',  'searchClientReports'); 
     Route::post('search-reports',  'searchReports')->name('search.reports'); 
 
 });
