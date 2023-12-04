@@ -13,7 +13,10 @@ use Illuminate\Http\Request;
 class ArchiveInvoiceController extends Controller
 {
     public function __construct(){
-        $this->middleware('returnRedirectIfNotAuth');
+        $this->middleware(['auth' , 'check.user.status'] );
+        $this->middleware('permission:ارشيف الفواتير',   ['only' => ['index']]);
+        $this->middleware('permission:ارشفة الفاتورة',   ['only' => ['archive','restore']]);
+
     }
 
     public function index()

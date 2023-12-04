@@ -9,8 +9,9 @@ use App\Models\Invoice;
 class InvoicesDetailsController extends Controller
 {
     public function __construct(){
-        $this->middleware('returnRedirectIfNotAuth');
+        $this->middleware(['auth' , 'check.user.status'] );
     }
+
 
 
     public function index()

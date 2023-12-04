@@ -6,7 +6,9 @@ use App\Http\Controllers\Invoices\Attachments\InvoicesAttachmentsController;
 use App\Http\Controllers\Invoices\InvoicesController;
 use App\Http\Controllers\Invoices\Details\InvoicesDetailsController;
 use App\Http\Controllers\Products\ProductController;
+use App\Http\Controllers\Roles\RoleController;
 use App\Http\Controllers\Sections\SectionController;
+use App\Http\Controllers\Users\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -122,3 +124,19 @@ Route::resource('products', ProductController::class);
 
 
 
+
+
+############################################ Begin Roles #############################################
+
+Route::resource('roles', RoleController::class);
+
+############################################ End Roles #############################################
+
+
+
+
+############################################ Begin Users #############################################
+
+    Route::resource('users', UserController::class);
+
+############################################ End Users #############################################

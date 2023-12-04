@@ -12,7 +12,10 @@ use Illuminate\Support\Facades\Storage;
 class InvoicesAttachmentsController extends Controller
 {
     public function __construct(){
-        $this->middleware('returnRedirectIfNotAuth');
+        $this->middleware(['auth' , 'check.user.status'] );
+        $this->middleware('permission:اضافة مرفق',   ['only' => ['create' , 'store']]);
+        $this->middleware('permission:حذف المرفق',   ['only' => ['destroy']]);
+
     }
 
 

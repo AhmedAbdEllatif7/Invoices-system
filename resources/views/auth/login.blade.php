@@ -21,9 +21,13 @@
 	<link rel="stylesheet" type="text/css" href="{{URL::asset('assets/css/main.css')}}">
 <!--===============================================================================================-->
 </head>
+
 <body>
+    
 	<div class="limiter">
+        
 		<div class="container-login100">
+            
 			<div class="wrap-login100">
 				<div class="login100-pic js-tilt" data-tilt>
 					<img src="{{asset('assets/img/media/image2.png')}}" alt="IMG">
@@ -63,6 +67,19 @@
                     </a>
                 @endif --}}
 				</form>
+                <!-- Your Blade View -->
+                @if(session('status'))
+                <div class="alert alert-danger">
+                    {{ session('status') }}
+                </div>
+                @endif
+
+                @if(session('loginError'))
+                <div class="alert alert-danger">
+                    {{ session('loginError') }}
+                </div>
+                @endif
+
 			</div>
 		</div>
 	</div>

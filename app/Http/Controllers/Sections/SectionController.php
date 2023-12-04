@@ -10,14 +10,13 @@ use Illuminate\Support\Facades\Auth;
 
 class SectionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
 
     public function __construct(){
-        $this->middleware('returnRedirectIfNotAuth');
+        $this->middleware(['auth' , 'check.user.status'] );
+        $this->middleware('permission:الاقسام',    ['only' => ['index']]);
+        $this->middleware('permission:حذف قسم',   ['only' => ['destroy']]);
+        $this->middleware('permission:اضافة قسم', ['only' => ['create','store']]);
+        $this->middleware('permission:تعديل قسم', ['only' => ['edit','update']]);
     }
 
     public function index()

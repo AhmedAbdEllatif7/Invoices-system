@@ -16,9 +16,17 @@ use Throwable;
 class InvoicesController extends Controller
 {
     public function __construct(){
-        $this->middleware('returnRedirectIfNotAuth');
-    }
+        $this->middleware(['auth' , 'check.user.status'] );
+        $this->middleware('permission:قائمة الفواتير',  ['only' => ['index']]);
+        $this->middleware('permission:الفواتير المدفوعة',  ['only' => ['viewPaidInvoices']]);
+        $this->middleware('permission:الفواتير الغير مدفوعة', ['only' => ['viewUnPaidInvoices']]);
+        $this->middleware('permission:الفواتير المدفوعة جزئيا', ['only' => ['viewUnPaidInvoices']]);
+        $this->middleware('permission:اضافة فاتورة', ['only' => ['create' ,'store']]);
+        $this->middleware('permission:تعديل الفاتورة', ['only' => ['edit' , 'update']]);
+        $this->middleware('permission:حذف الفاتورة', ['only' => ['destroy']]);
+        $this->middleware('permission:طباعةالفاتورة', ['only' => ['showPrint']]);
 
+    }
 
 
     public function index()

@@ -17,7 +17,7 @@ class ProductRequest extends FormRequest
         $id = request()->id; // Assuming the ID is passed as 'id' in the request
         return [
             'product_name' => ['required' , 'max:50' , Rule::unique('products')->ignore($id)],
-            'section_name' => 'required',
+            'section_id' => 'required',
             'description' => 'nullable'
         ];
     }
@@ -28,7 +28,7 @@ class ProductRequest extends FormRequest
             'product_name.required' => 'عفوا يجب إدخال اسم المنتج',
             'product_name.unique' => 'عفوا هذا المنتج موجود بالفعل',
             'product_name.max' => 'عفوا لقد تجاوزت الحد الأقصى من الحروف',
-            'section_name.required' => 'عفوا يجب اختيار اسم القسم',
+            'section_id.required' => 'عفوا يجب اختيار اسم القسم',
         ];
     }
 }

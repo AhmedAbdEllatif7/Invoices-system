@@ -12,7 +12,13 @@ class ProductController extends Controller
 {
 
     public function __construct(){
-        $this->middleware('returnRedirectIfNotAuth');
+
+        $this->middleware(['auth' , 'check.user.status'] );
+        $this->middleware('permission:المنتجات',   ['only' => ['index']]);
+        $this->middleware('permission:حذف منتج',   ['only' => ['destroy']]);
+        $this->middleware('permission:اضافة منتج', ['only' => ['create','store']]);
+        $this->middleware('permission:تعديل منتج', ['only' => ['edit','update']]);
+    
     }
 
     public function index()
@@ -34,6 +40,7 @@ class ProductController extends Controller
 
         session()->flash('add_product');
         return redirect()->back();
+
     }
 
 
@@ -42,14 +49,11 @@ class ProductController extends Controller
 
     public function update(ProductRequest $request)
     {
-        $sectionId = Section::where('section_name',$request->section_name)->first()->id;
 
         $productId = $request->id;
 
         $validatedData = $request->validated();
         
-        $validatedData['section_id'] = $sectionId;
-
         $product = Product::findorFail($productId);
 
         $product->update($validatedData);

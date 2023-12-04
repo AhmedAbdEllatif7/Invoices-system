@@ -48,6 +48,7 @@ class Kernel extends HttpKernel
 
     protected $routeMiddleware = [
         'auth' => \App\Http\Middleware\Authenticate::class,
+        'check.user.status' => \App\Http\Middleware\CheckUserStatus::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'auth.session' => \Illuminate\Session\Middleware\AuthenticateSession::class,
         'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
@@ -59,6 +60,9 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'returnRedirectIfAuth2' => \App\Http\Middleware\returnRedirectIfAuth2::class,
         'returnRedirectIfNotAuth' => \App\Http\Middleware\ReturnRedirectIfNotAuth::class,
+        'role' => \Spatie\Permission\Middlewares\RoleMiddleware::class,
+        'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
+        'role_or_permission' => \Spatie\Permission\Middlewares\RoleOrPermissionMiddleware::class,
 
     ];
 }

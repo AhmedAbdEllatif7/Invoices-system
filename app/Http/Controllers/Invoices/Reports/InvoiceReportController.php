@@ -13,9 +13,11 @@ class InvoiceReportController extends Controller
 {
 
     public function __construct(){
-        $this->middleware('returnRedirectIfNotAuth');
-    }
+        $this->middleware(['auth' , 'check.user.status'] );
+        $this->middleware('permission:تقرير الفواتير',   ['only' => ['index']]);
+        $this->middleware('permission:تقرير العملاء',   ['only' => ['indexClients']]);
 
+    }
     public function index()
     {
         $invoices = Invoice::get();

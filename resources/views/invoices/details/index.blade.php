@@ -203,6 +203,7 @@
 
                                             <!--المرفقات-->
                                             <div class="card card-statistics">
+                                                @can('اضافة مرفق')
                                                 <div class="card-body">
                                                     <p class="text-danger">* صيغة المرفق pdf, jpeg ,.jpg , png </p>
                                                     <h5 class="card-title">اضافة مرفقات</h5>
@@ -225,7 +226,9 @@
                                                     </form>
                                                 </div>
                                             </div>
+                                            @endcan
                                             <br>
+                                            
 
 
                                             <div class="card-body">
@@ -279,6 +282,7 @@
                                                                                     class="fas fa-download"></i>&nbsp;
                                                                                 تحميل</a>
                                                                                 @endif
+                                                                                @can('حذف المرفق')
                                                                                 <button style="width: 150px"
                                                                                 class="btn btn-outline-danger btn-sm "
                                                                                 data-attachment_id="{{ $invoiceAttachment->id }}"
@@ -287,7 +291,8 @@
                                                                                 data-toggle="modal"
                                                                                 data-target="#modaldemo9"><i class="fas fa-trash-alt">
                                                                             </i>&nbsp;حذف</button>
-                                                                            
+                                                                            @endcan
+
                                                                             </div>
                                                                         </div>
 

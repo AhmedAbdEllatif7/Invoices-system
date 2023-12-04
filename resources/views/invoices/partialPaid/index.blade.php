@@ -68,9 +68,7 @@
         <div class="col-xl-12">
             <div class="card">
                 <div class="card-header pb-0">
-                    <a href="{{route('invoices.create')}}" class="modal-effect btn btn-sm btn-primary"
-                        style="color:white; width:100px;margin-right: 18px;"><i class="fas fa-plus"></i>&nbsp; اضافة
-                        فاتورة</a>
+                    
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -89,7 +87,6 @@
                                     <th class="border-bottom-0">الأجمالي</th>
                                     <th class="border-bottom-0">الحالة</th>
                                     <th class="border-bottom-0">ملاحظات</th>
-                                    <th class="border-bottom-0">العمليات</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -119,41 +116,6 @@
                                             @endif
                                         </td>
                                         <td>{{ $invoice->note }}</td>
-                                        <td>
-                                            <div class="dropdown">
-                                                <button style="width: 102px;font-size: 12px;padding: 8px;"
-                                                aria-expanded="false" aria-haspopup="true"
-                                                class="btn ripple btn-primary" data-toggle="dropdown"
-                                                id="dropdownMenuButton" type="button">العمليات
-                                                <i class="fas fa-caret-down ml-1"></i>
-                                                </button>
-
-                                                <div class="dropdown-menu tx-13">
-                                                <a style="width: 150px" class=" btn btn-outline-warning btn-sm"
-                                                href="{{ route('invoices.edit' , $invoice->id) }}">
-                                                <i class="fas fa-edit"></i> &nbsp;&nbsp;&nbsp; تعديل 
-                                                </a>
-
-                                                <a style="width: 150px; height:30px; font-size:13px" class=" btn btn-outline-success btn-sm"
-                                                href="{{ route('invoices.show' , $invoice->id) }}">
-                                                <i class="fas fa-money-bill"></i> &nbsp;&nbsp;&nbsp; تغيير حالة الدفع
-                                                </a>
-
-                                                <a style="width: 150px; height:30px ; font-size:13px" class=" btn btn-outline-success btn-sm"
-                                                href="{{ url('show_print/' . $invoice->id) }}">
-                                                <i class="fas fa-print"></i> &nbsp;&nbsp;&nbsp; طباعة
-                                                </a>
-
-                                                <button style="width: 150px;  height:30px; font-size:13px" class="btn btn-outline-info btn-sm"
-                                                        data-id="{{ $invoice->id }}"
-                                                        data-invoice_number="{{ $invoice->invoice_number }}"
-                                                        data-section="{{ $invoice->section->section_name }}"
-                                                        data-toggle="modal" href="#modaldemo10" title="أرشفة">
-                                                        <i class="text-warning fas fa-exchange-alt">&nbsp;&nbsp;&nbsp;أرشفة</i>
-                                                </button>
-                                            </div>
-                                            </div>
-                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>

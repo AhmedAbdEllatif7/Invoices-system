@@ -68,8 +68,10 @@
         <div class="col-xl-12">
             <div class="card">
                 <br>
-                <a href="invoices/create" class="modal-effect btn btn-sm btn-primary"
-                    style="color:white; width:100px;margin-right: 18px;"><i class="fas fa-plus"></i>&nbsp; اضافة فاتورة</a>
+                @can('اضافة فاتورة')
+                        <a href="invoices/create" class="modal-effect btn btn-sm btn-primary" style="color:white">
+                        <i class="fas fa-plus"></i>&nbsp; اضافة فاتورة</a>
+                @endcan
                 <div class="card-body">
 
                     <div class="table-responsive">
@@ -129,34 +131,45 @@
                                                 </button>
                                                 <div class="dropdown-menu tx-13">
 
+                                                    @can('تعديل الفاتورة')
                                                     <a style="width: 150px; height:30px; font-size:13px" class=" btn btn-outline-info btn-sm"
                                                         href="{{ route('invoices.edit' , $invoice->id) }}"><i
                                                             class="fas fa-edit"></i>&nbsp;&nbsp;&nbsp;تعديل</a>
+                                                    @endcan
 
+                                                    @can('تغير حالة الدفع')
                                                     <a style="width: 150px; height:30px; font-size:13px" class=" btn btn-outline-success btn-sm"
                                                         href="{{ route('invoices.show' , $invoice->id) }}"><i
                                                             class="fas fa-money-bill"></i>&nbsp;&nbsp;&nbsp;تغيير حالة
                                                         الدفع</a>
+                                                    @endcan
 
 
+                                                    @can('حذف الفاتورة')
                                                     <button style="width: 150px;  height:30px; font-size:13px" class="btn btn-outline-danger btn-sm"
                                                         data-id="{{ $invoice->id }}"
                                                         data-invoice_number="{{ $invoice->invoice_number }}"
                                                         data-section="{{ $invoice->section->section_name }}"
                                                         data-toggle="modal" href="#modaldemo9" title="حذف"><i
                                                             class="fas fa-trash-alt"></i>&nbsp;&nbsp;&nbsp;حذف</button>
+                                                    @endcan
 
 
+                                                    @can('ارشفة الفاتورة')
                                                     <button style="width: 150px;  height:30px; font-size:13px" class="btn btn-outline-info btn-sm"
                                                         data-id="{{ $invoice->id }}"
                                                         data-invoice_number="{{ $invoice->invoice_number }}"
                                                         data-section="{{ $invoice->section->section_name }}"
                                                         data-toggle="modal" href="#modaldemo10" title="أرشفة"><i class="text-warning fas fa-exchange-alt">&nbsp;&nbsp;&nbsp;أرشفة</i></button>
+                                                    @endcan
 
 
+                                                    @can('طباعةالفاتورة')
                                                         <a style="width: 150px; height:30px ; font-size:13px" class=" btn btn-outline-success btn-sm"
                                                         href="{{ url('show-print/' . $invoice->id) }}"><i
                                                             class="fas fa-print"></i>&nbsp;&nbsp;&nbsp;طباعة</a>
+                                                    @endcan
+
                                             </div>
                                         </td>
                                     </tr>
