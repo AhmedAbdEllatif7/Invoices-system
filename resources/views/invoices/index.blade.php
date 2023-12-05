@@ -67,13 +67,13 @@
 
         <div class="col-xl-12">
             <div class="card">
-                <br>
-                @can('اضافة فاتورة')
-                        <a href="invoices/create" class="modal-effect btn btn-sm btn-primary" style="color:white; width:100px">
-                        <i class="fas fa-plus"></i>&nbsp; اضافة فاتورة</a>
-                @endcan
                 <div class="card-body">
-
+                    @can('اضافة فاتورة')
+                    <a href="invoices/create" class="modal-effect btn btn-sm btn-primary" style="color:white; width:100px">
+                    <i class="fas fa-plus"></i>&nbsp; اضافة فاتورة</a>
+                    @endcan
+                    <br> <br>
+                    
                     <div class="table-responsive">
                         <table id="example1" class="table key-buttons text-md-nowrap" data-page-length='50'>
                             <thead>
