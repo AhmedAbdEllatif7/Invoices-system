@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -68,6 +69,11 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call(SectionSeeder::class);
+        $this->call(InvoicesSeeder::class);
+
+
+        // Delete existing records using DB facade
+        // DB::table('permissions')->delete();
 
         foreach ($this->permissions as $permission) {
             Permission::create(['name' => $permission]);
