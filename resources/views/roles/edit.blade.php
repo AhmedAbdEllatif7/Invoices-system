@@ -49,6 +49,8 @@
                         {!! Form::text('name', null, array('placeholder' => 'Name','class' => 'form-control')) !!}
                     </div>
                 </div>
+                <input type="hidden" name="id" , value="{{$role->id}}"
+
                 <div class="row">
                     <!-- col -->
                     <div class="col-lg-4">

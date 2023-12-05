@@ -69,7 +69,7 @@
             <div class="card">
                 <br>
                 @can('اضافة فاتورة')
-                        <a href="invoices/create" class="modal-effect btn btn-sm btn-primary" style="color:white">
+                        <a href="invoices/create" class="modal-effect btn btn-sm btn-primary" style="color:white; width:100px">
                         <i class="fas fa-plus"></i>&nbsp; اضافة فاتورة</a>
                 @endcan
                 <div class="card-body">

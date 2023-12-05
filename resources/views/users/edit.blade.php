@@ -75,7 +75,7 @@
                         {!! Form::password('confirm-password', array('class' => 'form-control','required')) !!}
                     </div>
                 </div>
-
+                <input type="hidden" name="id" , value="{{$user->id}}"
                 <div class="row row-sm mg-b-20">
                     <div class="col-lg-6">
                         <label class="form-label">حالة المستخدم</label>

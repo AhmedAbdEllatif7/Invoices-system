@@ -26,7 +26,7 @@ class CheckUserStatus
 
         // If the user is logged out, redirect to the login page
         if (!$user && $request->route()->named('login')) {
-            return redirect('/')->with('status', 'Please log in.');
+            return redirect('/')->with('status', 'من فضلك سجل دخولك');
         }
 
         // If the user is logged in but their status is not active, force logout and redirect to login
@@ -34,7 +34,7 @@ class CheckUserStatus
             Auth::logout();
         }
 
-        return redirect('/')->with('status', 'Your account is not active. Please log in again.');
+        return redirect('/')->with('status', 'عفوا هذا الحساب غير مفعل, يمكنك المحاولة فيما بعد');
         }
     }
 
