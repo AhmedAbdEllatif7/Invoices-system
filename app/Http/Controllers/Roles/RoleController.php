@@ -5,160 +5,64 @@ namespace App\Http\Controllers\Roles;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RoleRequest;
-use Illuminate\Support\Facades\DB;
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
+use App\Interfaces\Roles\RoleRepositoryInterface;
 
 class RoleController extends Controller
 {
     
-    function __construct()
-    {
+    private $roleRepository;
+
+    public function __construct(RoleRepositoryInterface $roleRepository) {
     $this->middleware(['auth' , 'check.user.status'] );
     $this->middleware('permission:عرض صلاحية', ['only' => ['index']]);
     $this->middleware('permission:اضافة صلاحية', ['only' => ['create','store']]);
     $this->middleware('permission:تعديل صلاحية', ['only' => ['edit','update']]);
     $this->middleware('permission:حذف صلاحية', ['only' => ['destroy']]);
 
+    $this->roleRepository = $roleRepository;
+
     }
-
-
-
 
 
     public function index(Request $request)
     {
-    $roles = Role::orderBy('id','DESC')->paginate(5);
-    return view('roles.index',compact('roles'))
-    ->with('i', ($request->input('page', 1) - 1) * 5);
+        return $this->roleRepository->index($request);
     }
-
-
-
 
 
     public function create()
     {
-    $permission = Permission::all();
-    return view('roles.create',compact('permission'));
+        return $this->roleRepository->create();
     }
-
-
-
 
 
     public function store(RoleRequest $request)
     {
-        $validatedData = $request->validated();
-        
-        $role = $this->createRole($validatedData['name']);
-        $this->syncPermissionsToRole($role, $validatedData['permission']);
-    
-        return redirect()->route('roles.index')->with('success', 'Role created successfully');
-    }
-    
-    private function createRole($name)
-    {
-        return Role::create(['name' => $name]);
-    }
-    
-    private function syncPermissionsToRole($role, $permissions)
-    {
-        $role->syncPermissions($permissions);
-    }
-    
-
-
-
+        return $this->roleRepository->store($request);
+    }    
 
 
     public function show($id)
     {
-        $role = $this->findRoleById($id);
-        $rolePermissions = $this->getRolePermissions($id);
-    
-        return view('roles.show', compact('role', 'rolePermissions'));
+        return $this->roleRepository->show($id);
     }
-    
-    private function findRoleById($id)
-    {
-        return Role::findOrFail($id);
-    }
-    
-    private function getRolePermissions($id)
-    {
-        return Permission::join("role_has_permissions", "role_has_permissions.permission_id", "=", "permissions.id")
-            ->where("role_has_permissions.role_id", $id)
-            ->get();
-    }
-    
-
-
-
-
-    
-
-    
 
 
     public function edit($id)
     {
-        $role = $this->findRoleById($id);
-        $permission = $this->getAllPermissions();
-        $rolePermissions = $this->getAllRolePermissions($id);
-    
-        return view('roles.edit', compact('role', 'permission', 'rolePermissions'));
-    }
-    
-
-    private function getAllPermissions()
-    {
-        return Permission::get();
-    }
-
-    
-    private function getAllRolePermissions($id)
-    {
-        return DB::table("role_has_permissions")->where("role_has_permissions.role_id",$id)
-        ->pluck('role_has_permissions.permission_id','role_has_permissions.permission_id')
-        ->all();
+        return $this->roleRepository->edit($id);
     }
 
 
     public function update(RoleRequest $request, $id)
-    {
-        $validatedData = $request->validated();
-        
-        $role = $this->findRoleById($id);
-        $this->updateRoleDetails($role, $validatedData['name']);
-        $this->syncPermissionsToRole($role, $validatedData['permission']);
-    
-        return redirect()->route('roles.index')->with('success', 'Role updated successfully');
+    {        
+        return $this->roleRepository->update($request, $id);
     }
-    
-    private function updateRoleDetails($role, $name)
+
+
+    public function destroy($id)
     {
-        $role->name = $name;
-        $role->save();
+        return $this->roleRepository->destroy($id);
     }
-    
-    
 
-    
-
-
-
-
-
-        public function destroy($id)
-        {
-            $role = DB::table("roles")->find($id);
-            if ($role) {
-                DB::table("roles")->where('id', $id)->delete();
-                    return redirect()->route('roles.index')->with('success', 'Role deleted successfully');
-            } else {
-                return redirect()->route('roles.index')->with('error', 'Role not found');
-            }
-        }
-        
 }

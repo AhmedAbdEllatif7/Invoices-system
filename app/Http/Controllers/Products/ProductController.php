@@ -4,77 +4,46 @@ namespace App\Http\Controllers\Products;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
-use App\Models\Product;
-use App\Models\Section;
+use App\Interfaces\Products\ProductRepositoryInterface;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
 
-    public function __construct(){
+    private $productRepository;
+
+    public function __construct(ProductRepositoryInterface $productRepository) {
 
         $this->middleware(['auth' , 'check.user.status'] );
         $this->middleware('permission:المنتجات',   ['only' => ['index']]);
         $this->middleware('permission:حذف منتج',   ['only' => ['destroy']]);
         $this->middleware('permission:اضافة منتج', ['only' => ['create','store']]);
         $this->middleware('permission:تعديل منتج', ['only' => ['edit','update']]);
-    
+
+        $this->productRepository = $productRepository;
     }
 
     public function index()
     {
-        $products = Product::all();
-        $sections = Section::all();
-        return view('products.index',compact('products','sections'));
+        return $this->productRepository->index();
     }
-
-
-
 
 
     public function store(ProductRequest $request)
     {
-        $validatedData = $request->validated();
-
-        Product::create($validatedData);
-
-        session()->flash('add_product');
-        return redirect()->back();
-
+        return $this->productRepository->store($request);
     }
-
-
-
 
 
     public function update(ProductRequest $request)
     {
-
-        $productId = $request->id;
-
-        $validatedData = $request->validated();
-        
-        $product = Product::findorFail($productId);
-
-        $product->update($validatedData);
-
-        session()->flash('edit');
-        return back();
-
+        return $this->productRepository->update($request);
     }
-
-
 
 
     public function destroy(Request $request)
     {
-
-        $id = $request->id;
-
-        $product = Product::findOrFail($id);
-        $product = $product->destroy($id);
-        session()->flash('delete');
-        return redirect()->back();
+        return $this->productRepository->destroy($request);
     }
 
 

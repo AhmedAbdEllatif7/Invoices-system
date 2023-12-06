@@ -81,9 +81,9 @@ class InvoiceRepository implements InvoiceRepositoryInterface {
 
     public function edit($id)
     {
-            $invoice  = Invoice::findOrFail($id);
-            $sections = Section::get();
-            return view('invoices.edit',compact('invoice','sections'));
+        $invoice  = Invoice::findOrFail($id);
+        $sections = Section::get();
+        return view('invoices.edit',compact('invoice','sections'));
     }
 
 
