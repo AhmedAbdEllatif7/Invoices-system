@@ -17,9 +17,6 @@ class InvoicesSeeder extends Seeder
     public function run()
     {
 
-        // Delete existing records using DB facade
-        DB::table('invoices')->delete();
-        DB::table('invoice_details')->delete();
 
         
         // Retrieve sections and products from the database

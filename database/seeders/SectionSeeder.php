@@ -15,7 +15,7 @@ class SectionSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('sections')->delete();
+
         Section::create(['section_name' => 'بنك الأهلي', 'created_by' => now()]);
         Section::create(['section_name' => 'بنك الرياض', 'created_by' => now()]);
         

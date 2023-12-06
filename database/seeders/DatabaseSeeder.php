@@ -68,12 +68,15 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $this->call(ProductSeeder::class);
         $this->call(SectionSeeder::class);
         $this->call(InvoicesSeeder::class);
 
 
         // Delete existing records using DB facade
-        // DB::table('permissions')->delete();
+        DB::table('roles')->delete();
+        DB::table('permissions')->delete();
+
 
         foreach ($this->permissions as $permission) {
             Permission::create(['name' => $permission]);
