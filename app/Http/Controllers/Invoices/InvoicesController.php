@@ -1,10 +1,13 @@
 <?php
 
 namespace App\Http\Controllers\Invoices;
+
+use App\Exports\InvoicesExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\InvoiceRequest;
 use App\Interfaces\Invoices\InvoiceRepositoryInterface;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 
 class InvoicesController extends Controller
@@ -25,6 +28,11 @@ class InvoicesController extends Controller
         $this->invoiceRepository = $invoiceRepository;
     }
 
+    public function export() 
+    {
+        return $this->invoiceRepository->export();
+
+    }
 
     public function index()
     {

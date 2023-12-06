@@ -36,6 +36,7 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Route::resource('invoices', InvoicesController::class);
 
+
 Route::controller(InvoicesController::class)->group(function(){
     Route::get('show-print/{id}', 'showPrint')->name('show.print.invoice'); 
     Route::post('invoice-update-status/{id}', 'updateStatus')->name('update.status.invoice'); 
@@ -43,6 +44,7 @@ Route::controller(InvoicesController::class)->group(function(){
     Route::get('paid-invoices',  'viewPaidInvoices'); 
     Route::get('unpaid-invoices', 'viewUnPaidInvoices');  
     Route::get('partial-paid-invoices',  'viewPartialPaid');   
+    Route::get('users/export/',  'export');
 
 });
 ############################################ End Invoices ##################################################

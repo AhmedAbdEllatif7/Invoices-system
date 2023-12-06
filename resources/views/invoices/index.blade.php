@@ -66,14 +66,19 @@
         @endif
 
         <div class="col-xl-12">
-            <div class="card">
-                <div class="card-body">
+            <div class="card mg-b-20">
+                <div class="card-header pb-0">
                     @can('اضافة فاتورة')
-                    <a href="invoices/create" class="modal-effect btn btn-sm btn-primary" style="color:white; width:100px">
-                    <i class="fas fa-plus"></i>&nbsp; اضافة فاتورة</a>
+                        <a href="invoices/create" class="modal-effect btn btn-sm btn-primary" style="color:white"><i
+                                class="fas fa-plus"></i>&nbsp; اضافة فاتورة</a>
+                    @endcan
+                    &nbsp;
+                    @can('تصدير EXCEL')
+                        <a class="modal-effect btn btn-sm btn-primary" href="{{ url('users/export/') }}"
+                            style="color:white"><i class="fas fa-file-download"></i>&nbsp;تصدير اكسيل</a>
                     @endcan
                     <br> <br>
-                    
+
                     <div class="table-responsive">
                         <table id="example1" class="table key-buttons text-md-nowrap" data-page-length='50'>
                             <thead>

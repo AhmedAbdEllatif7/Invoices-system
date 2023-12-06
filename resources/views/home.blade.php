@@ -32,7 +32,8 @@
 										</div>
 										<span class="float-right my-auto mr-auto">
 											<i class="fas fa-arrow-circle-up text-white"></i>
-											<span class="text-white op-7">100%</span>
+											<span class="text-white op-7">
+												
 										</span>
 									</div>
 								</div>

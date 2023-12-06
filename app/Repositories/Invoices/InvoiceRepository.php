@@ -10,8 +10,17 @@ use App\Models\Section;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Throwable;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\InvoicesExport;
 
 class InvoiceRepository implements InvoiceRepositoryInterface {
+
+
+    public function export() 
+    {
+        return Excel::download(new InvoicesExport, 'invoices.xlsx');
+    }
+
 
     public function index()
     {

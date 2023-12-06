@@ -4,6 +4,8 @@ namespace App\Interfaces\Invoices;
 
 interface InvoiceRepositoryInterface{
 
+    public function export();
+
     public function index();
 
     public function create();
