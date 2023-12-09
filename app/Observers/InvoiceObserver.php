@@ -70,7 +70,6 @@ class InvoiceObserver
     {
         $this->deleteAttachments($invoice->id);
         $invoice->forceDelete();
-
     }
 
 

@@ -31,4 +31,7 @@ interface InvoiceRepositoryInterface{
     public function viewPartialPaid();
     
     public function showPrint($request , $id);
+
+    public function deleteSelectedInvoices($request);
+
 }

@@ -28,42 +28,7 @@
 @endsection
 @section('content')
     <!-- row -->
-    <div class="row">
-        @if (session()->has('delete'))
-            <script>
-                window.onload = function() {
-                    notif({
-                        msg: 'تم حذف الفاتورة بنجاح',
-                        type: 'success'
-                    })
-                }
-            </script>
-        @endif
-
-
-        @if (session()->has('archiev'))
-        <script>
-            window.onload = function() {
-                notif({
-                    msg: 'تمت أرشفة الفاتورة بنجاح',
-                    type: 'success'
-                })
-            }
-        </script>
-    @endif
-
-
-
-        @if (session()->has('edit'))
-            <script>
-                window.onload = function() {
-                    notif({
-                        msg: 'تم تغيير حالة الدفع بنجاح',
-                        type: 'success'
-                    })
-                }
-            </script>
-        @endif
+    
 
         <div class="col-xl-12">
             <div class="card mg-b-20">
@@ -77,14 +42,20 @@
                         <a class="modal-effect btn btn-sm btn-primary" href="{{ url('users/export/') }}"
                             style="color:white"><i class="fas fa-file-download"></i>&nbsp;تصدير اكسيل</a>
                     @endcan
+                    &nbsp;
+                    
+                    <button type="button" class="modal-effect btn btn-sm btn-danger" id="btn_delete_all">
+                        حذف العناصر المحددة
+                    </button>
+
                     <br> <br>
 
+                    
                     <div class="table-responsive">
                         <table id="example1" class="table key-buttons text-md-nowrap" data-page-length='50'>
                             <thead>
                                 <tr>
-                                    <th class="border-bottom-0">#</th>
-                                    <th class="border-bottom-0">رقم الفاتورة</th>
+                                    <th><input name="select_all" id="example-select-all" type="checkbox" onclick="CheckAll('box1', this)" /></th>                                    <th class="border-bottom-0">رقم الفاتورة</th>
                                     <th class="border-bottom-0">تاريخ الفاتورة</th>
                                     <th class="border-bottom-0">تاريخ الأستحقاق</th>
                                     <th class="border-bottom-0">المنتج</th>
@@ -101,8 +72,7 @@
                             <tbody>
                                 @foreach ($invoices as $invoice)
                                     <tr>
-                                        <td>{{ $invoice->id }}</td>
-                                        <td>{{ $invoice->invoice_number }}</td>
+                                        <td><input type="checkbox"  value="{{ $invoice->id }}" class="box1" ></td>                                        <td>{{ $invoice->invoice_number }}</td>
                                         <td>{{ $invoice->invoice_date }}</td>
                                         <td>{{ $invoice->due_date }}</td>
                                         <td>{{ $invoice->product }}</td>
@@ -210,6 +180,9 @@
                                         </div>
                                     </div>
                                 </div>
+
+
+                                        
                                 @endforeach
                             </tbody>
                         </table>
@@ -217,7 +190,37 @@
                 </div>
             </div>
 
-            
+                                <!-- حذف مجموعة صفوف -->
+                    <div class="modal fade" id="delete_all" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">حذف الفاتورة</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+
+                        <form action="{{route('delete.selected.invoices')}}" method="POST">
+                            @method('DELETE')
+                            {{ csrf_field() }}
+                            <div class="modal-body">
+                                هل انت متأكد من حذف العناصر المحددة؟
+                                <input class="text" type="hidden" id="delete_all_id" name="delete_all_id" value=''>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary"
+                                        data-dismiss="modal">الغاء</button>
+                                <button type="submit" class="btn btn-danger">تأكيد الحذف</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                </div>
+
+
 
 
 
@@ -284,19 +287,23 @@
     <!--Internal  Datatable js -->
     <script src="{{ URL::asset('assets/js/table-data.js') }}"></script>
 
-    <script>
-        $('#modaldemo9').on('show.bs.modal', function(event) {
-            var button = $(event.relatedTarget)
-            var id = button.data('id')
-            var invoice_number = button.data('invoice_number')
-            var section = button.data('section')
-            var modal = $(this)
-            modal.find('.modal-body #id').val(id);
-            modal.find('.modal-body #invoice_number').val(invoice_number);
-            modal.find('.modal-body #section').val(section);
 
-        })
-    </script>
+
+
+<script>
+    $('#modaldemo9').on('show.bs.modal', function(event) {
+        var button = $(event.relatedTarget)
+        var id = button.data('id')
+        var invoice_number = button.data('invoice_number')
+        var section = button.data('section')
+        var modal = $(this)
+        modal.find('.modal-body #id').val(id);
+        modal.find('.modal-body #invoice_number').val(invoice_number);
+        modal.find('.modal-body #section').val(section);
+
+    })
+</script>
+
 
 
 <script>
@@ -312,6 +319,55 @@
 
     })
 </script>
+
+
+
+
+
+
+<script type="text/javascript">
+    $(function() {
+        $("#btn_delete_all").click(function() {
+            var selected = new Array();
+            $(".box1:checked").each(function() {
+                selected.push(this.value);
+            });
+
+            if (selected.length > 0) {
+                $('#delete_all_id').val(selected);
+                $('#delete_all').modal('show');
+            } else {
+                // If no checkboxes are checked, show a message or handle accordingly
+                // For example:
+                alert('Please select at least one item to delete.');
+            }
+        });
+    });
+</script>
+
+
+
+
+
+
+
+<script>
+    function CheckAll(className, elem) {
+        var elements = document.getElementsByClassName(className);
+        var l = elements.length;
+
+        if (elem.checked) {
+            for (var i = 0; i < l; i++) {
+                elements[i].checked = true;
+            }
+        } else {
+            for (var i = 0; i < l; i++) {
+                elements[i].checked = false;
+            }
+        }
+    }
+</script>
+
 
     <!--Internal  Notify js -->
     <script src="{{ URL::asset('assets/plugins/notify/js/notifIt.js') }}"></script>

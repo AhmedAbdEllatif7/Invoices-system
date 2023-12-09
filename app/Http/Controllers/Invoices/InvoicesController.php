@@ -8,7 +8,7 @@ use App\Http\Requests\InvoiceRequest;
 use App\Interfaces\Invoices\InvoiceRepositoryInterface;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
-
+use App\Models\Invoice;
 
 class InvoicesController extends Controller
 {
@@ -45,17 +45,14 @@ class InvoicesController extends Controller
     }
 
 
-
     public function store(InvoiceRequest $request) {
         return $this->invoiceRepository->store($request);
     }
 
 
-
     public function show($id) {
         return $this->invoiceRepository->show($id);
     }
-
 
     
     public function edit($id) {
@@ -63,17 +60,14 @@ class InvoicesController extends Controller
     }
 
 
-
     public function update(InvoiceRequest $request) {
         return $this->invoiceRepository->update($request);
     }
 
 
-
     public function destroy(Request $request) {
         return $this->invoiceRepository->destroy($request);
     }
-
 
     
     public function getProducts($id) {
@@ -81,18 +75,14 @@ class InvoicesController extends Controller
     }
 
 
-
     public function updateStatus(Request $request) {
         return $this->invoiceRepository->updateStatus($request);
     }
 
 
-    
-
     public function viewPaidInvoices() {
         return $this->invoiceRepository->viewPaidInvoices();
     }
-
 
 
     public function viewUnPaidInvoices() {
@@ -100,16 +90,20 @@ class InvoicesController extends Controller
     }
 
 
-
     public function viewPartialPaid() {
         return $this->invoiceRepository->viewPartialPaid();
     }
-
 
 
     public function showPrint(Request $request, $id) {
         return $this->invoiceRepository->showPrint($request, $id);
     }
 
+
+    public function deleteSelectedInvoices(Request $request)
+    {
+        return $this->invoiceRepository->deleteSelectedInvoices($request);
+    }
+    
 }
 

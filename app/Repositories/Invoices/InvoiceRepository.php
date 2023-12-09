@@ -12,6 +12,10 @@ use Illuminate\Support\Facades\DB;
 use Throwable;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\InvoicesExport;
+use App\Models\User;
+use App\Notifications\InvoiceCreated as NotificationsInvoiceCreated;
+use App\Observers\InvoiceObserver;
+use Illuminate\Support\Facades\Notification;
 
 class InvoiceRepository implements InvoiceRepositoryInterface {
 
@@ -54,12 +58,11 @@ class InvoiceRepository implements InvoiceRepositoryInterface {
                 $invoiceValidatedData['note'] = $request->note;
             }
     
-            // Save Invoice In DataBase
             $invoice = Invoice::create($invoiceValidatedData);
     
             // Save Invoice Details and Invoice Attachments In Datbase
             event(new InvoiceCreated($invoice));
-    
+
             DB::commit();
     
             session()->flash('Add');
@@ -72,8 +75,6 @@ class InvoiceRepository implements InvoiceRepositoryInterface {
         }
         
     }
-
-
 
 
 
@@ -211,5 +212,28 @@ class InvoiceRepository implements InvoiceRepositoryInterface {
         
         return view('invoices.print.index',compact('invoice'));
     }
+
+
+
+    public function deleteSelectedInvoices($request)
+    {
+        try {
+            $delete_all_id = explode(",", $request->delete_all_id);
+            
+            foreach($delete_all_id as $id)
+            {
+                InvoiceObserver::deleteAttachments($id);
+            }
+            
+            $deleted = Invoice::whereIn('id', $delete_all_id)->forceDelete();
+            if ($deleted) {
+                return redirect()->back()->with(['deleteSelected' => 'تم حذف العناصر المحددة بنجاح']);
+            }
+            return redirect()->back()->withErrors(trans('grade_trans.Failed to delete selected grades.'));
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
+        }
+    }
+    
 
 }

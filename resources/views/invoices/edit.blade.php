@@ -66,16 +66,6 @@
         @endif
 
 
-        @if (session()->has('error'))
-            <script>
-                window.onload = function() {
-                    notif({
-                        msg: 'عفوا لا توجد فاتورة بهذا الرقم !',
-                        type: 'error'
-                    })
-                }
-            </script>
-        @endif
 
         <div class="col-lg-12 col-md-12">
             <div class="card">
