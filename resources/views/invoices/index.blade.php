@@ -90,6 +90,18 @@ window.onload = function() {
     @endif
 
 
+@if (session()->has('changeStatusGroup'))
+        <script>
+            window.onload = function() {
+                notif({
+                    msg: 'تم تعديل حالة دفع العناصر المحددة بنجاح',
+                    type: 'success'
+                })
+            }
+        </script>
+    @endif
+
+
 
 @if (session()->has('error'))
 <script>
@@ -134,7 +146,7 @@ window.onload = function() {
                     &nbsp;
 
 
-                    <button type="button" class="modal-effect btn btn-sm btn-primary" id="btn_delete_all">
+                    <button type="button" class="modal-effect btn btn-sm btn-primary" id="btn_change_selected_status">
                         <i class="fas fa-edit"></i>&nbsp;&nbsp;&nbsp;تغيير حالة العناصر المحددة</a>
 
                     </button>
@@ -242,6 +254,8 @@ window.onload = function() {
                                         </td>
                                     </tr>
                                         @include('modals.invoices.delete')
+                                        @include('modals.invoices.changeSelectedStatus')
+
                                 @endforeach
                             </tbody>
                         </table>
@@ -316,7 +330,7 @@ window.onload = function() {
 
 
 
-
+{{-- archiev all selected --}}
 <script type="text/javascript">
     $(function() {
         $("#btn_archive_selected").click(function() {
@@ -340,6 +354,7 @@ window.onload = function() {
 
 
 
+{{-- delete all selected --}}
 <script type="text/javascript">
     $(function() {
         $("#btn_delete_all").click(function() {
@@ -362,6 +377,30 @@ window.onload = function() {
 
 
 
+
+
+{{-- //change status --}}
+<script type="text/javascript">
+    $(function() {
+        $("#btn_change_selected_status").click(function() {
+            var selected = new Array();
+            $(".box1:checked").each(function() {
+                selected.push(this.value);
+            });
+
+            if (selected.length > 0) {
+                $('#change_status_selected_id').val(selected);
+                $('#change_delected_status').modal('show');
+            } else {
+                // If no checkboxes are checked, show a message or handle accordingly
+                // For example:
+                alert('Please select at least one item to change its status.');
+            }
+        });
+    });
+</script>
+
+
 <script>
     function CheckAll(className, elem) {
         var elements = document.getElementsByClassName(className);
@@ -378,6 +417,17 @@ window.onload = function() {
         }
     }
 </script>
+
+<script>
+    // $(document).ready(function() {
+    //     // Hide the selected element initially
+    //     $('#product').hide();
+    //     $('#section').hide();
+    //     $('#rate_vat').hide();
+    // });
+</script>
+
+
 
 
     <!--Internal  Notify js -->

@@ -26,6 +26,7 @@ class Invoice extends Model
         'total',
         'status',
         'value_status',
+        'payment_date',
         'note',
         'deleted_at',
     ];

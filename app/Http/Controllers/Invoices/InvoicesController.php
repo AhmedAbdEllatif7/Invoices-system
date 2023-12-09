@@ -104,6 +104,13 @@ class InvoicesController extends Controller
     {
         return $this->invoiceRepository->deleteSelectedInvoices($request);
     }
+
+
+
+    public function changeGroupStatus(Request $request)
+    {
+        return $this->invoiceRepository->changeGroupStatus($request);
+    }
     
 }
 

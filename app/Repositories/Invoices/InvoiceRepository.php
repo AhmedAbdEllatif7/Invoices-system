@@ -134,6 +134,9 @@ class InvoiceRepository implements InvoiceRepositoryInterface {
     }
 
 
+    
+
+
 
 
     //Belongs to ajax
@@ -142,6 +145,10 @@ class InvoiceRepository implements InvoiceRepositoryInterface {
         $products = DB::table("products")->where("section_id", $id)->pluck("product_name", "id");
         return json_encode($products);
     }
+
+
+
+
 
 
 
@@ -156,28 +163,16 @@ class InvoiceRepository implements InvoiceRepositoryInterface {
         
         $invoice->update($data);
         
-        $this->updateDetails($request , $data['value_status']);
+        $this->updateDetails($invoice);
         
         session()->flash('edit');
         return redirect('invoices');
     }
 
 
-    private function updateDetails($request , $valueStatus)
-    {
-        InvoiceDetail::create([
-            'invoice_id'    => $request->id,
-            'invoice_number'=> $request->invoice_number,
-            'product'       => $request->product,
-            'section_id'    => $request->section_id,
-            'status'        => $request->Status,
-            'value_status'  => $valueStatus,
-            'payment_date'  => $request->payment_date,
-            'note'          => $request->note,
-            'user'          => Auth::user()->name,
-        ]);
 
-    }
+
+
 
 
 
@@ -215,6 +210,11 @@ class InvoiceRepository implements InvoiceRepositoryInterface {
 
 
 
+
+
+
+
+
     public function deleteSelectedInvoices($request)
     {
         try {
@@ -229,7 +229,7 @@ class InvoiceRepository implements InvoiceRepositoryInterface {
             if ($deleted) {
                 return redirect()->back()->with(['deleteSelected' => 'تم حذف العناصر المحددة بنجاح']);
             }
-            return redirect()->back()->withErrors(trans('grade_trans.Failed to delete selected grades.'));
+            return redirect()->back()->withErrors('حدث خطأ في حذف العناصر المحددة');
         } catch (\Exception $e) {
             return redirect()->back()->withErrors(['error' => $e->getMessage()]);
         }
@@ -240,6 +240,55 @@ class InvoiceRepository implements InvoiceRepositoryInterface {
 
 
 
-    
+
+
+
+    public function changeGroupStatus($request)
+    {
+        try {
+            $change_status_selected_id = explode(",", $request->change_status_selected_id);
+            
+            foreach ($change_status_selected_id as $id) {
+                $invoice = Invoice::findOrFail($id);
+                
+                $data = [
+                    'value_status' => $request->Status === 'مدفوعة' ? 1 : 2,
+                    'status' => $request->Status,
+                    'payment_date' => $request->payment_date, 
+                ];
+                
+                $invoice->update($data);
+                
+                $this->updateDetails($invoice);
+            }
+            
+            return redirect()->back()->with(['changeStatusGroup' => 'تم تغيير حالة الدفع للعناصر المحددة بنجاح']);
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
+        }
+    }
+
+
+
+    public function updateDetails($invoice)
+    {
+        InvoiceDetail::create([
+            'invoice_id'    => $invoice->id,
+            'invoice_number'=> $invoice->invoice_number,
+            'product'       => $invoice->product,
+            'section_id'    => $invoice->section_id,
+            'status'        => $invoice->status,
+            'value_status'  => $invoice->value_status,
+            'payment_date'  => $invoice->payment_date,
+            'note'          => $invoice->note,
+            'user'          => Auth::user()->name,
+        ]);
+    }
+
+
+
+
+
+
 
 }

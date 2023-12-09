@@ -46,6 +46,7 @@ Route::controller(InvoicesController::class)->group(function(){
     Route::get('partial-paid-invoices',  'viewPartialPaid');   
     Route::get('users/export/',  'export');
     Route::delete('delete-selected-invoices',  'deleteSelectedInvoices')->name('delete.selected.invoices');
+    Route::post('change-status-selected',  'changeGroupStatus')->name('change.group.status');
 
 });
 ############################################ End Invoices ##################################################

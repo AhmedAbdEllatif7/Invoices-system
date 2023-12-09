@@ -34,4 +34,10 @@ interface InvoiceRepositoryInterface{
 
     public function deleteSelectedInvoices($request);
 
+    public function changeGroupStatus($request);
+
+    public function updateDetails($request);
+
+    
+
 }
