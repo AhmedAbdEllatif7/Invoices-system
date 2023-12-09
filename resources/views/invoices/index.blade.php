@@ -29,7 +29,66 @@
 @section('content')
     <!-- row -->
     
+    @if (session()->has('delete'))
+    <script>
+        window.onload = function() {
+            notif({
+                msg: 'تم حذف الفاتورة بنجاح',
+                type: 'success'
+            })
+        }
+    </script>
+@endif
 
+
+@if (session()->has('archiev'))
+<script>
+    window.onload = function() {
+        notif({
+            msg: 'تمت أرشفة الفاتورة بنجاح',
+            type: 'success'
+        })
+    }
+</script>
+@endif
+
+
+
+@if (session()->has('edit'))
+    <script>
+        window.onload = function() {
+            notif({
+                msg: 'تم تغيير حالة الدفع بنجاح',
+                type: 'success'
+            })
+        }
+    </script>
+@endif
+
+
+@if (session()->has('deleteSelected'))
+<script>
+window.onload = function() {
+    notif({
+        msg: 'تم حذف العناصر المحددة بنجاح',
+        type: 'success'
+    })
+}
+</script>
+@endif
+
+
+
+@if (session()->has('error'))
+<script>
+window.onload = function() {
+    notif({
+        msg: 'عفوا لا توجد فاتورة بهذا الرقم !',
+        type: 'error'
+    })
+}
+</script>
+@endif
         <div class="col-xl-12">
             <div class="card mg-b-20">
                 <div class="card-header pb-0">
@@ -148,117 +207,15 @@
                                             </div>
                                         </td>
                                     </tr>
-
-                                    <!-- delete -->
-                                <div class="modal fade" id="modaldemo9" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-                                    aria-hidden="true">
-                                    <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title">حذف الفاتورة</h5>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <form action="{{ route('invoices.destroy','test') }}" method="post">
-                                                @method('DELETE') <!-- Use DELETE method for deletion -->
-                                                @csrf
-                                                <div class="modal-body">
-                                                    <p>هل انت متاكد من عملية الحذف ؟</p><br>
-                                                    <input type="hidden" name="id" id="id" value="{{$invoice->id}}">
-                                                    <label>رقم الفاتورة</label>
-                                                    <input class="form-control" name="invoice_number" id="invoice_number" type="text"
-                                                        readonly>
-                                                    <label>اسم القسم</label>
-                                                    <input class="form-control" name="section" id="section" type="text" readonly>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">الغاء</button>
-                                                    <button type="submit" class="btn btn-danger">تاكيد</button>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-
-
-                                        
+                                        @include('modals.invoices.delete')
                                 @endforeach
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
-
-                                <!-- حذف مجموعة صفوف -->
-                    <div class="modal fade" id="delete_all" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-                    aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title">حذف الفاتورة</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-
-                        <form action="{{route('delete.selected.invoices')}}" method="POST">
-                            @method('DELETE')
-                            {{ csrf_field() }}
-                            <div class="modal-body">
-                                هل انت متأكد من حذف العناصر المحددة؟
-                                <input class="text" type="hidden" id="delete_all_id" name="delete_all_id" value=''>
-                            </div>
-
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary"
-                                        data-dismiss="modal">الغاء</button>
-                                <button type="submit" class="btn btn-danger">تأكيد الحذف</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                </div>
-
-
-
-
-
-            <!-- archief -->
-            <div class="modal fade" id="modaldemo10" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-                aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">أرشفة الفاتورة</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <form action="{{url('archive-invoice')}}" method="post">
-                            {{ csrf_field() }}
-                            <div class="modal-body">
-                                <p>هل انت متاكد من عملية الأرشفة ؟</p><br>
-                                <input type="hidden" name="id" id="id" value="">
-                                <label>رقم الفاتورة</label>
-                                <input class="form-control" name="invoice_number" id="invoice_number" type="text"
-                                    readonly>
-                                <label>اسم القسم</label>
-                                <input class="form-control" name="section" id="section" type="text" readonly>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">الغاء</button>
-                                <button type="submit" class="btn btn-success">تاكيد</button>
-                            </div>
-
-                            
-                        </form>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
+            @include('modals.invoices.deleteSelected')
+            @include('modals.invoices.archive')
 
     <!-- row closed -->
     </div>
