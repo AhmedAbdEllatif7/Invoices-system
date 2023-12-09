@@ -22,7 +22,7 @@ aria-hidden="true">
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">الغاء</button>
-                <button type="submit" class="btn btn-success">تاكيد</button>
+                <button type="submit" class="btn btn-warning">تاكيد</button>
             </div>
 
             

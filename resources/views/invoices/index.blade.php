@@ -78,6 +78,18 @@ window.onload = function() {
 @endif
 
 
+@if (session()->has('archiveSelectedInvoices'))
+        <script>
+            window.onload = function() {
+                notif({
+                    msg: 'تم أرشفة العناصر المحددة بنجاح',
+                    type: 'success'
+                })
+            }
+        </script>
+    @endif
+
+
 
 @if (session()->has('error'))
 <script>
@@ -96,25 +108,46 @@ window.onload = function() {
                         <a href="invoices/create" class="modal-effect btn btn-sm btn-primary" style="color:white"><i
                                 class="fas fa-plus"></i>&nbsp; اضافة فاتورة</a>
                     @endcan
+
                     &nbsp;
+
                     @can('تصدير EXCEL')
-                        <a class="modal-effect btn btn-sm btn-primary" href="{{ url('users/export/') }}"
-                            style="color:white"><i class="fas fa-file-download"></i>&nbsp;تصدير اكسيل</a>
+                        <a class="modal-effect btn btn-sm btn-success" href="{{ url('users/export/') }}"
+                            style="color:white"><i class="fas fa-file-download"></i>&nbsp;&nbsp;&nbsp;تصدير اكسيل</a>
                     @endcan
+
                     &nbsp;
-                    
+
                     <button type="button" class="modal-effect btn btn-sm btn-danger" id="btn_delete_all">
-                        حذف العناصر المحددة
+                        <i class="fas fa-trash"></i>&nbsp;&nbsp;&nbsp;حذف العناصر المحددة
+                    </a>
                     </button>
 
-                    <br> <br>
+                    &nbsp;
 
-                    
+
+                    <button type="button" class="modal-effect btn btn-sm btn-warning" id="btn_archive_selected">
+                        <i class="fas fa-archive"></i>&nbsp;&nbsp;&nbsp;أرشفة العناصر المحددة</a>
+
+                    </button>
+
+                    &nbsp;
+
+
+                    <button type="button" class="modal-effect btn btn-sm btn-primary" id="btn_delete_all">
+                        <i class="fas fa-edit"></i>&nbsp;&nbsp;&nbsp;تغيير حالة العناصر المحددة</a>
+
+                    </button>
+
+                    <br>
+
+                    &nbsp;
                     <div class="table-responsive">
                         <table id="example1" class="table key-buttons text-md-nowrap" data-page-length='50'>
                             <thead>
                                 <tr>
-                                    <th><input name="select_all" id="example-select-all" type="checkbox" onclick="CheckAll('box1', this)" /></th>                                    <th class="border-bottom-0">رقم الفاتورة</th>
+                                    <th><input name="select_all" id="example-select-all" type="checkbox" onclick="CheckAll('box1', this)" /> </th>
+                                    <th class="border-bottom-0">رقم الفاتورة</th>
                                     <th class="border-bottom-0">تاريخ الفاتورة</th>
                                     <th class="border-bottom-0">تاريخ الأستحقاق</th>
                                     <th class="border-bottom-0">المنتج</th>
@@ -131,7 +164,8 @@ window.onload = function() {
                             <tbody>
                                 @foreach ($invoices as $invoice)
                                     <tr>
-                                        <td><input type="checkbox"  value="{{ $invoice->id }}" class="box1" ></td>                                        <td>{{ $invoice->invoice_number }}</td>
+                                        <td><input type="checkbox"  value="{{ $invoice->id }}" class="box1" ></td>
+                                        <td>{{ $invoice->invoice_number }}</td>
                                         <td>{{ $invoice->invoice_date }}</td>
                                         <td>{{ $invoice->due_date }}</td>
                                         <td>{{ $invoice->product }}</td>
@@ -215,7 +249,8 @@ window.onload = function() {
                 </div>
             </div>
             @include('modals.invoices.deleteSelected')
-            @include('modals.invoices.archive')
+            @include('modals.invoices.archives.archiveSelected')
+            @include('modals.invoices.archives.archive')
 
     <!-- row closed -->
     </div>
@@ -284,6 +319,29 @@ window.onload = function() {
 
 <script type="text/javascript">
     $(function() {
+        $("#btn_archive_selected").click(function() {
+            var selected = new Array();
+            $(".box1:checked").each(function() {
+                selected.push(this.value);
+            });
+
+            if (selected.length > 0) {
+                $('#archive_selected_id').val(selected);
+                $('#archive_selected').modal('show');
+            } else {
+                // If no checkboxes are checked, show a message or handle accordingly
+                // For example:
+                alert('Please select at least one item to archive.');
+            }
+        });
+    });
+</script>
+
+
+
+
+<script type="text/javascript">
+    $(function() {
         $("#btn_delete_all").click(function() {
             var selected = new Array();
             $(".box1:checked").each(function() {
@@ -301,10 +359,6 @@ window.onload = function() {
         });
     });
 </script>
-
-
-
-
 
 
 

@@ -35,6 +35,17 @@ class ArchiveInvoiceController extends Controller
     
 
 
+    public function archiveSelectedInvoices(Request $request)
+    {
+        return $this->archiveRepository->archiveSelectedInvoices($request);
+    }
+
+
+    public function restoreSelectedInvoices(Request $request)
+    {
+        return $this->archiveRepository->restoreSelectedInvoices($request);
+    }
+
 
     public function deleteFromArchive(Request $request)
     {
@@ -46,7 +57,13 @@ class ArchiveInvoiceController extends Controller
     public function restoreInvoice(Request $request)
     {
         return $this->archiveRepository->restoreInvoice($request);
+    }
 
+    
+
+    public function forceDeleteSelectedInvoices(Request $request)
+    {
+        return $this->archiveRepository->forceDeleteSelectedInvoices($request);
     }
 
 }

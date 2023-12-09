@@ -50,21 +50,59 @@
                 })
             }
         </script>
+  @endif
+
+        @if (session()->has('restoreSelected'))
+        <script>
+            window.onload = function() {
+                notif({
+                    msg: 'تمت إستعادة العناصر المحددة بنجاح',
+                    type: 'success'
+                })
+            }
+        </script>
     @endif
 
+
+
+        @if (session()->has('deleteSelectedInvoices'))
+        <script>
+            window.onload = function() {
+                notif({
+                    msg: 'تم حذف العناصر المحددة بنجاح',
+                    type: 'success'
+                })
+            }
+        </script>
+    @endif
+
+
+        
 
 
     <div class="row row-sm">
         <div class="col-xl-12">
             <div class="card">
                 <div class="card-header pb-0">
-                
+
+                    <button type="button" class="modal-effect btn btn-sm btn-success" id="btn_restore_selected">
+                        <i class="fas fa-exchange-alt"></i>&nbsp;&nbsp;&nbsp;إستعادة العناصر المحددة</a>
+                    </button>
+
+
+                    &nbsp;
+
+                    <button type="button" class="modal-effect btn btn-sm btn-danger" id="btn_delete_all_selected">
+                        <i class="fas fa-trash"></i>&nbsp;&nbsp;&nbsp;حذف العناصر المحددة
+                    </a>
+                    </button>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table mg-b-0 text-md-nowrap">
                             <thead>
                                 <tr>
+                                    <th><input name="select_all" id="example-select-all" type="checkbox" onclick="CheckAll('box1', this)" /> </th>
                                     <th class="border-bottom-0">#</th>
                                     <th class="border-bottom-0">رقم الفاتورة</th>
                                     <th class="border-bottom-0">تاريخ الفاتورة</th>
@@ -83,6 +121,7 @@
                             <tbody>
                                 @foreach ($invoices as $invoice)
                                     <tr>
+                                        <td><input type="checkbox"  value="{{ $invoice->id }}" class="box1" ></td>
                                         <td>{{ $invoice->id }}</td>
                                         <td>{{ $invoice->invoice_number }}</td>
                                         <td>{{ $invoice->invoice_date }}</td>
@@ -139,76 +178,21 @@
             </div>
         </div>
 
-        <div class="modal fade" id="modaldemo9" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">حذف المنتج نهائيا</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <form action="{{ url('delete-from-archive') }}" method="post">
-                        {{ method_field('post') }}
-                        {{ csrf_field() }}
-                        <div class="modal-body">
-                            <p>هل انت متاكد من عملية الحذف نهائيا ؟</p><br>
-                            <input type="hidden" name="id" id="id" value="">
-                            <label>رقم الفاتورة</label>
-                            <input class="form-control" name="invoice_number" id="invoice_number" type="text" readonly>
-                            <label>اسم القسم</label>
-                            <input class="form-control" name="section" id="section" type="text" readonly>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">الغاء</button>
-                            <button type="submit" class="btn btn-danger">تاكيد</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
 
+        @include('modals.invoices.archives.forceDelete')
 
-
-        <!-- restore -->
-        <div class="modal fade" id="modaldemo10" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">إستعادة الفاتورة</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <form action="{{route('restore')}}" method="post">
-                    {{ method_field('post') }}
-                    {{ csrf_field() }}
-                    <div class="modal-body">
-                        <p>هل انت متاكد من عملية الإستعادة ؟</p><br>
-                        <input type="hidden" name="id" id="id" value="">
-                        <label>رقم الفاتورة</label>
-                        <input class="form-control" name="invoice_number" id="invoice_number" type="text"
-                            readonly>
-                        <label>اسم القسم</label>
-                        <input class="form-control" name="section" id="section" type="text" readonly>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">الغاء</button>
-                        <button type="submit" class="btn btn-success">تاكيد</button>
-                    </div>
-
-                    
-                </form>
-            </div>
-        </div>
-    </div>
+        @include('modals.invoices.archives.restore')
         <!-- row closed -->
+
+
+        @include('modals.invoices.archives.restoreSelected')
+        @include('modals.invoices.archives.forceDeleteSelected')
+
     </div>
     <!-- Container closed -->
-    </div>
-    </div>
+</div>
+</div>    </div>
+</div>
     <!-- main-content closed -->
 @endsection
 @section('js')
@@ -259,6 +243,68 @@
         modal.find('.modal-body #section').val(section);
 
     })
+</script>
+
+
+<script type="text/javascript">
+    $(function() {
+        $("#btn_restore_selected").click(function() {
+            var selected = new Array();
+            $(".box1:checked").each(function() {
+                selected.push(this.value);
+            });
+
+            if (selected.length > 0) {
+                $('#restore_archive_selected_id').val(selected);
+                $('#restore_archive_selected').modal('show');
+            } else {
+                // If no checkboxes are checked, show a message or handle accordingly
+                // For example:
+                alert('Please select at least one item to restore.');
+            }
+        });
+    });
+</script>
+
+
+
+<script type="text/javascript">
+    $(function() {
+        $("#btn_delete_all_selected").click(function() {
+            var selected = new Array();
+            $(".box1:checked").each(function() {
+                selected.push(this.value);
+            });
+
+            if (selected.length > 0) {
+                $('#force_delete_selected_id').val(selected);
+                $('#force_delete_selected').modal('show');
+            } else {
+                // If no checkboxes are checked, show a message or handle accordingly
+                // For example:
+                alert('Please select at least one item to force delete.');
+            }
+        });
+    });
+</script>
+
+
+
+<script>
+    function CheckAll(className, elem) {
+        var elements = document.getElementsByClassName(className);
+        var l = elements.length;
+
+        if (elem.checked) {
+            for (var i = 0; i < l; i++) {
+                elements[i].checked = true;
+            }
+        } else {
+            for (var i = 0; i < l; i++) {
+                elements[i].checked = false;
+            }
+        }
+    }
 </script>
 <!--Internal  Notify js -->
 <script src="{{ URL::asset('assets/plugins/notify/js/notifIt.js') }}"></script>

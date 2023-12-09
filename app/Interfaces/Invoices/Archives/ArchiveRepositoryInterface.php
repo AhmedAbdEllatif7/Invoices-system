@@ -20,5 +20,11 @@ interface ArchiveRepositoryInterface {
     public function deleteFromArchive($request);
     
     public function restoreInvoice($request);
+
+    public function archiveSelectedInvoices($request);
+
+    public function restoreSelectedInvoices($request);
+
+    public function forceDeleteSelectedInvoices($request);
     
 }

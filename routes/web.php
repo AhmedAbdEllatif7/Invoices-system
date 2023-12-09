@@ -84,8 +84,12 @@ Route::get("attachments/download/{invoice_number}/{file_name}" , 'downloadFile')
 
 Route::get('archives' , [ArchiveInvoiceController::class , 'index'])->name('archives.index');
 Route::post('archive-invoice' , [ArchiveInvoiceController::class , 'archive'])->name('archive.invoice');
+Route::delete('archive-selected-invoices',  [ArchiveInvoiceController::class , 'archiveSelectedInvoices'])->name('archive.selected.invoices');
+Route::delete('restore-selected-invoices',  [ArchiveInvoiceController::class , 'restoreSelectedInvoices'])->name('restore.selected.invoices');
 Route::post('restore' , [ArchiveInvoiceController::class , 'restoreInvoice'])->name('restore');
 Route::post('delete-from-archive' , [ArchiveInvoiceController::class , 'deleteFromArchive']);
+Route::delete('force-delete-selected-invoices',  [ArchiveInvoiceController::class , 'forceDeleteSelectedInvoices'])->name('forceDelete.selected.invoices');
+
 
 ############################################ End Archive Invoice ##############################################
 
