@@ -24,19 +24,11 @@
 			<div class="container-fluid">
 				@yield('page-header')
 				@yield('content')
-				@include('layouts.sidebar')
 				@include('layouts.models')
             	@include('layouts.footer')
 				@include('layouts.footer-scripts')	
 	</body>
 	
-{{-- <script>
-    setInterval(function() {
-        $("#icone").load(window.location.href + " #icone");
-        $("#unreadnotifications_count").load(window.location.href + " #unreadnotifications_count");
-        $("#unreadnotifications").load(window.location.href + " #unreadnotifications");
-    }, 1000);
-	
-</script> --}}
+
 
 </html>

@@ -5,8 +5,6 @@ namespace App\Listeners;
 use App\Events\InvoiceCreated;
 use App\Models\Invoice;
 use App\Models\InvoiceDetail;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Auth;
 
 class StoreInvoiceDetails

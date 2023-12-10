@@ -2,10 +2,7 @@
 
 namespace App\Notifications;
 
-use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Auth;
 
@@ -37,6 +34,7 @@ class NewInvoiceIsCreated extends Notification
 
             'title' => ' تمت إضافة فاتورة بواسطة',
             'id' => $this->invoice->id,
+            'invoice_number' => $this->invoice->invoice_number,
             'created_by' => Auth::user()->name,
         ];
     }

@@ -57,7 +57,7 @@
 								<div class="dropdown-menu">
 									<div class="menu-header-content bg-primary text-right">
 										<div class="d-flex">
-											
+
 											<h6 class="dropdown-title mb-1 tx-15 text-white font-weight-semibold">الإشعارات</h6>
 											@if(auth()->user()->unreadNotifications->count() > 0)
 											<span class="badge badge-pill badge-warning mr-auto my-auto float-left" style="font-size: 16px;">
@@ -83,6 +83,9 @@
 													<div class="mr-3">
 														<h5 class="notification-label mb-1">
 															{{ $notification->data['title'] }} {{ $notification->data['created_by'] }}
+														</h5>
+														<h5 class="notification-label mb-1">
+														        رقم الفاتورة {{ $notification->data['invoice_number'] }} 
 														</h5>
 														<div class="notification-subtext">
 															{{ $notification->created_at->setTimezone('Africa/Cairo')->format('F j, Y g:i A') }}
@@ -129,15 +132,5 @@
 					</div>
 				</div>
 			</div>
-			<div class="row">
-				@if (session()->has('readAllNoti'))
-					<script>
-						window.onload = function() {
-							notif({
-								msg: 'تمت قرائة الأشعارات بنجاح',
-								type: 'success'
-							})
-						}
-					</script>
-				@endif
+	
 <!-- /main-header -->

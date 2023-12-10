@@ -3,7 +3,6 @@
 namespace App\Repositories\Users;
 
 use App\Interfaces\Users\UserRepositoryInterface;
-use App\Http\Requests\UserRequest;
 use App\Models\User;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Arr;

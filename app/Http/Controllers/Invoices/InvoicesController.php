@@ -2,13 +2,10 @@
 
 namespace App\Http\Controllers\Invoices;
 
-use App\Exports\InvoicesExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\InvoiceRequest;
 use App\Interfaces\Invoices\InvoiceRepositoryInterface;
 use Illuminate\Http\Request;
-use Maatwebsite\Excel\Facades\Excel;
-use App\Models\Invoice;
 
 class InvoicesController extends Controller
 {

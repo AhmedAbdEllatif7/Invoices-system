@@ -115,11 +115,16 @@ Route::controller(InvoiceReportController::class)->group(function(){
 
 
 
+
+
+
 ############################################ Begin Section #############################################
 
 Route::resource('sections', SectionController::class);
 
 ############################################ End Section #############################################
+
+
 
 
 
@@ -135,11 +140,16 @@ Route::resource('products', ProductController::class);
 
 
 
+
+
+
 ############################################ Begin Roles #############################################
 
 Route::resource('roles', RoleController::class);
 
 ############################################ End Roles #############################################
+
+
 
 
 
@@ -152,5 +162,12 @@ Route::resource('roles', RoleController::class);
 
 
 
+
+
+
+############################################ Begin Notifications #############################################
+
 Route::get('/read-all-notification', [NotificationController::class, 'readAllNotification'])->name('read.all.notification');
 Route::get('/view-notification-invoice', [NotificationController::class, 'viewNotificationInvoice'])->name('view.notification.invoice');
+
+############################################ End Notifications #############################################

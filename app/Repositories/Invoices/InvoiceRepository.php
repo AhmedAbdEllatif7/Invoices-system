@@ -13,10 +13,8 @@ use Throwable;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\InvoicesExport;
 use App\Models\User;
-use App\Notifications\InvoiceCreated as NotificationsInvoiceCreated;
 use App\Notifications\NewInvoiceIsCreated;
 use App\Observers\InvoiceObserver;
-use Illuminate\Support\Facades\Notification;
 
 class InvoiceRepository implements InvoiceRepositoryInterface {
 
