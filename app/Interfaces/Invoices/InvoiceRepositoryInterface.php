@@ -12,6 +12,8 @@ interface InvoiceRepositoryInterface{
 
     public function store($request);
 
+    public function sendNotificationToOwner();
+
     public function show($id);
 
     public function edit($id);

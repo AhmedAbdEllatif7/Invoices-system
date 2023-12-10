@@ -5,6 +5,7 @@ use App\Http\Controllers\Invoices\Archives\ArchiveInvoiceController;
 use App\Http\Controllers\Invoices\Attachments\InvoicesAttachmentsController;
 use App\Http\Controllers\Invoices\InvoicesController;
 use App\Http\Controllers\Invoices\Details\InvoicesDetailsController;
+use App\Http\Controllers\Notifications\NotificationController;
 use App\Http\Controllers\Products\ProductController;
 use App\Http\Controllers\Roles\RoleController;
 use App\Http\Controllers\Sections\SectionController;
@@ -148,3 +149,8 @@ Route::resource('roles', RoleController::class);
     Route::resource('users', UserController::class);
 
 ############################################ End Users #############################################
+
+
+
+Route::get('/read-all-notification', [NotificationController::class, 'readAllNotification'])->name('read.all.notification');
+Route::get('/view-notification-invoice', [NotificationController::class, 'viewNotificationInvoice'])->name('view.notification.invoice');

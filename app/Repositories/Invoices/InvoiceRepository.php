@@ -14,6 +14,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\InvoicesExport;
 use App\Models\User;
 use App\Notifications\InvoiceCreated as NotificationsInvoiceCreated;
+use App\Notifications\NewInvoiceIsCreated;
 use App\Observers\InvoiceObserver;
 use Illuminate\Support\Facades\Notification;
 
@@ -63,6 +64,8 @@ class InvoiceRepository implements InvoiceRepositoryInterface {
             // Save Invoice Details and Invoice Attachments In Datbase
             event(new InvoiceCreated($invoice));
 
+            $this->sendNotificationToOwner();
+
             DB::commit();
     
             session()->flash('Add');
@@ -75,6 +78,22 @@ class InvoiceRepository implements InvoiceRepositoryInterface {
         }
         
     }
+
+
+
+    public function sendNotificationToOwner()
+    {
+        $userToNotify = User::where('email', 'ahmedabdellatif@gmail.com')->first();
+        $currentUserEmail = Auth::user()->email;
+    
+        if ($currentUserEmail !== 'ahmedabdellatif@gmail.com' && $userToNotify) {
+            $lastInvoice = Invoice::latest()->first();
+            $userToNotify->notify(new NewInvoiceIsCreated($lastInvoice));
+        }
+    }
+    
+
+
 
 
 

@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Invoices\Details;
 use App\Http\Controllers\Controller;
 use App\Models\Invoice;
 
-
 class InvoicesDetailsController extends Controller
 {
     public function __construct(){
@@ -14,16 +13,16 @@ class InvoicesDetailsController extends Controller
 
 
 
-    public function index()
+    public static function index()
     {
-
         $invoice = Invoice::findOrFail(request()->id);
         $invoiceDetails = $invoice->details->last();
         $AllInvoiceDetails = $invoice->details;
         $AllInvoiceAttachments = $invoice->attachment;
 
-        return view('invoices.details.index', compact('invoiceDetails','AllInvoiceDetails','AllInvoiceAttachments'));
+        return view('invoices.details.index', compact('invoiceDetails', 'AllInvoiceDetails', 'AllInvoiceAttachments'));
     }
+
 
 
 
