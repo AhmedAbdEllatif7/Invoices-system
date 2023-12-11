@@ -27,8 +27,18 @@
 				@include('layouts.models')
             	@include('layouts.footer')
 				@include('layouts.footer-scripts')	
+				<script>
+					setInterval(function() {
+						$("#notificationsCount").load(window.location.href + " #notificationsCount");
+						$("#unreadNotifications").load(window.location.href + " #unreadNotifications");
+						$("#unreadIconeNotifications").load(window.location.href + " #unreadIconeNotifications");
+					}, 5000);
+				
+				</script>
 	</body>
 	
 
 
 </html>
+
+

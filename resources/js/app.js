@@ -13,6 +13,10 @@ import { createApp } from 'vue';
  * to use in your application's views. An example is included for you.
  */
 
+import { Livewire } from '../../vendor/livewire/livewire/dist/livewire.esm'
+ 
+Livewire.start()
+
 const app = createApp({});
 
 import ExampleComponent from './components/ExampleComponent.vue';

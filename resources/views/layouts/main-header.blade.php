@@ -47,9 +47,11 @@
 										<path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
 									</svg>
 									@if(auth()->user()->unreadNotifications->count() > 0)
+									<div id="unreadIconeNotifications">
 										<span class="badge badge-pill badge-danger" style="position: absolute; top: 1px; right: 1px;">
 											{{ auth()->user()->unreadNotifications->count() }}
 										</span>
+									</div>
 									@endif
 								</a>
 								
@@ -67,7 +69,7 @@
 											
 										</div>
 										<p class="dropdown-title-text subtext mb-0 text-white op-6 pb-0 tx-12">
-											<h6 style="color: rgb(255, 255, 255)" id="notifications_count">
+											<h6 style="color: rgb(255, 255, 255)" id="notificationsCount">
 												{{ auth()->user()->unreadNotifications->count() }}
 											</h6>
 										</p>
@@ -85,7 +87,7 @@
 															{{ $notification->data['title'] }} {{ $notification->data['created_by'] }}
 														</h5>
 														<h5 class="notification-label mb-1">
-														        رقم الفاتورة {{ $notification->data['invoice_number'] }} 
+														رقم الفاتورة {{ $notification->data['invoice_number'] }} 
 														</h5>
 														<div class="notification-subtext">
 															{{ $notification->created_at->setTimezone('Africa/Cairo')->format('F j, Y g:i A') }}

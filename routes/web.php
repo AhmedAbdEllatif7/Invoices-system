@@ -12,6 +12,7 @@ use App\Http\Controllers\Sections\SectionController;
 use App\Http\Controllers\Users\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Livewire\Livewire;
 
 /*
 |--------------------------------------------------------------------------
