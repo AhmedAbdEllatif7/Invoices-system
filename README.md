@@ -1,6 +1,6 @@
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
-# Invoice Management System
+# Invoices Management System
 
 The Invoice Management System is a powerful and user-friendly web application designed to simplify invoicing processes for businesses of all sizes. Developed on Laravel, this open-source project aims to streamline invoice generation, tracking, and management, providing an efficient tool for freelancers, small business owners, and accounting professionals.
 
