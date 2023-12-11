@@ -212,7 +212,7 @@
                     </div>
                 </div>
             </div>
-            @include('modals.invoices.archive')
+            @include('modals.invoices.archives.archive')
 
 <!-- row closed -->
 </div>
