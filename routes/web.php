@@ -12,7 +12,6 @@ use App\Http\Controllers\Sections\SectionController;
 use App\Http\Controllers\Users\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use Livewire\Livewire;
 
 /*
 |--------------------------------------------------------------------------
@@ -119,6 +118,26 @@ Route::controller(InvoiceReportController::class)->group(function(){
 
 
 
+
+
+############################################ Begin Notifications #############################################
+
+Route::controller(NotificationController::class)->group(function(){
+    Route::get('/read-all-notification', 'readAllNotification')->name('read.all.notification');
+    Route::get('/view-notification-invoice',  'viewNotificationInvoice')->name('view.notification.invoice');
+    Route::get('/view-read-notification-invoice', 'viewReadNotificationInvoice')->name('view.read.notification.invoice');
+    Route::delete('/delete-slected-notifications',  'deleteSelectedNotifications')->name('delete.selected.notifications');
+
+});
+
+############################################ End Notifications #############################################
+
+
+
+
+
+
+
 ############################################ Begin Section #############################################
 
 Route::resource('sections', SectionController::class);
@@ -166,9 +185,3 @@ Route::resource('roles', RoleController::class);
 
 
 
-############################################ Begin Notifications #############################################
-
-Route::get('/read-all-notification', [NotificationController::class, 'readAllNotification'])->name('read.all.notification');
-Route::get('/view-notification-invoice', [NotificationController::class, 'viewNotificationInvoice'])->name('view.notification.invoice');
-
-############################################ End Notifications #############################################

@@ -46,26 +46,37 @@
 										<path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
 										<path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
 									</svg>
+								<div id="unreadIconeNotifications">
 									@if(auth()->user()->unreadNotifications->count() > 0)
-									<div id="unreadIconeNotifications">
 										<span class="badge badge-pill badge-danger" style="position: absolute; top: 1px; right: 1px;">
 											{{ auth()->user()->unreadNotifications->count() }}
 										</span>
-									</div>
 									@endif
+								</div>
 								</a>
 								
-								
 								<div class="dropdown-menu">
-									<div class="menu-header-content bg-primary text-right">
-										<div class="d-flex">
+									<div class="menu-header-content bg-primary text-right" id="markAllRead">
+										<div  class="d-flex">
 
-											<h6 class="dropdown-title mb-1 tx-15 text-white font-weight-semibold">الإشعارات</h6>
+											<h6  class="dropdown-title mb-1 tx-15 text-white font-weight-semibold">الإشعارات</h6>
+											&nbsp;
+										
+
 											@if(auth()->user()->unreadNotifications->count() > 0)
 											<span class="badge badge-pill badge-warning mr-auto my-auto float-left" style="font-size: 16px;">
-												<a href="{{ route('read.all.notification') }}" style="color: white; font-size: inherit;">تحديد الكل كمقرؤ</a>
+												<a href="{{ route('read.all.notification') }}" style="color: rgb(0, 0, 0); font-size: inherit;">تحديد الكل كمقرؤ</a>
 											</span>
 											@endif
+											&nbsp;
+
+											@if(auth()->user()->readNotifications->count() > 0)
+											<span class="badge badge-pill badge-warning mr-auto my-auto float-left" style="font-size: inheret">
+												<a href="{{ route('view.read.notification.invoice') }}" style="color: rgb(0, 0, 0); font-size: inheret;"> الإشعارات المقروءة </a>
+											</span>
+											@endif
+								
+
 											
 										</div>
 										<p class="dropdown-title-text subtext mb-0 text-white op-6 pb-0 tx-12">

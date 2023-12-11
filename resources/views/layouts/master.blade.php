@@ -32,6 +32,7 @@
 						$("#notificationsCount").load(window.location.href + " #notificationsCount");
 						$("#unreadNotifications").load(window.location.href + " #unreadNotifications");
 						$("#unreadIconeNotifications").load(window.location.href + " #unreadIconeNotifications");
+						$("#markAllRead").load(window.location.href + " #markAllRead");
 					}, 5000);
 				
 				</script>
