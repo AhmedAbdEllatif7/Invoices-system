@@ -6,6 +6,7 @@ use App\Interfaces\Invoices\Archives\ArchiveRepositoryInterface;
 use App\Interfaces\Invoices\Attachments\AttachmentRepositoryInterface;
 use App\Interfaces\Invoices\InvoiceRepositoryInterface;
 use App\Interfaces\Invoices\Reports\ReportRepositoryInterface;
+use App\Interfaces\Notifications\NotificationsRepositoryInterface;
 use App\Interfaces\Products\ProductRepositoryInterface;
 use App\Interfaces\Roles\RoleRepositoryInterface;
 use App\Interfaces\Sections\SectionRepositoryInterface;
@@ -14,6 +15,7 @@ use App\Repositories\Invoices\Archives\ArchiveRepository;
 use App\Repositories\Invoices\Attachments\AttachmentRepository;
 use App\Repositories\Invoices\InvoiceRepository;
 use App\Repositories\Invoices\Reports\ReportRepository;
+use App\Repositories\Notifications\NotificationsRepository;
 use App\Repositories\Products\ProductRepository;
 use App\Repositories\Roles\RoleRepository;
 use Illuminate\Support\ServiceProvider;
@@ -45,6 +47,8 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(RoleRepositoryInterface::class , RoleRepository::class);
 
         $this->app->bind(UserRepositoryInterface::class , UserRepository::class);
+
+        $this->app->bind(NotificationsRepositoryInterface::class , NotificationsRepository::class);
 
     }
 }
