@@ -60,7 +60,7 @@ The Invoice Management System is a powerful and user-friendly web application de
 
 ## Technology Stack
 
-- Back-end: PHP, Laravel
+- Back-end: PHP, Laravel , JS
 - Database: MYSQL
 
 ## Getting Started
