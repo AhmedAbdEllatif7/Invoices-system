@@ -56,7 +56,6 @@ The Invoice Management System is a powerful and user-friendly web application de
 
 ---
 
-Continue updating the remaining sections with additional features, technical details, or any other pertinent information. Let me know if you need further assistance or if there's anything specific you'd like to add!
 
 
 ## Technology Stack
